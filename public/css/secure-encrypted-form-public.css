@@ -1,4 +1,43 @@
-/**
- * All of the CSS for your public-facing functionality should be
- * included in this file.
- */
+.secure-form label {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    padding: 0;
+}
+
+.secure-form input {
+    width: 100%;
+}
+
+.secure-form input[type="submit"] {
+    margin-top: 20px;
+}
+
+.secure-form .alert {
+    margin-top: 20px;
+    padding: 1rem;
+    width: 100%;
+    font-weight: 500;
+}
+
+.secure-form .alert-danger {
+    color: #c53030;
+    border: 1px solid #fc8181;
+    background-color: #fff5f5;
+}
+
+.secure-form .alert-success {
+    color: #234e52;
+    border: 1px solid #38b2ac;
+    background-color: #e6fffa;
+}
+
+.secure-form .has-error input,
+.secure-form .has-error textarea {
+    border-color: #fc8181 !important;
+}
+
+.secure-form .has-error .help-block {
+    color: #c53030;
+}

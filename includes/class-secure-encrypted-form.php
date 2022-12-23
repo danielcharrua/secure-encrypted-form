@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The file that defines the core plugin class
  *
@@ -154,8 +153,17 @@ class Secure_Encrypted_Form {
 
 		$plugin_admin = new Secure_Encrypted_Form_Admin( $this->get_plugin_name(), $this->get_version() );
 
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_admin_settings_page' );
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'secure_encrypted_form_page_init' );
+		$this->loader->add_action( 'admin_notices', $plugin_admin, 'show_incomplete_settings_notice' );
+
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+
+		// The wp_ajax_ is telling WordPress to use ajax and send_secure_form is the hook name to use in JavaScript.
+		// Handle backend secure test form.
+		$this->loader->add_action( 'wp_ajax_send_secure_test_form', $plugin_admin, 'send_secure_test_form' );
+		$this->loader->add_action( 'wp_ajax_nopriv_send_secure_test_form', $plugin_admin, 'send_secure_test_form' );
 
 	}
 
@@ -172,6 +180,23 @@ class Secure_Encrypted_Form {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+
+		/**
+		 * Register shortcode via loader
+		 *
+		 * Use: [secure-encrypted-form args]
+		 *
+		 * @link https://github.com/DevinVinson/WordPress-Plugin-Boilerplate/issues/262
+		 */
+		$this->loader->add_shortcode( 'secure-encrypted-form', $plugin_public, 'secure_encrypted_form_shortcode' );
+
+		// The wp_ajax_ is telling WordPress to use ajax and send_secure_form is the hook name to use in JavaScript.
+		// Handle fontend secure form.
+		$this->loader->add_action( 'wp_ajax_send_secure_form', $plugin_public, 'send_secure_form' );
+		$this->loader->add_action( 'wp_ajax_nopriv_send_secure_form', $plugin_public, 'send_secure_form' );
+
+		// Debug wp_mail errors.
+		$this->loader->add_action( 'wp_mail_failed', $plugin_public, 'debug_wp_mail_failure' );
 
 	}
 

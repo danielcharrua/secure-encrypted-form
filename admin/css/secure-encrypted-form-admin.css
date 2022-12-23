@@ -1,4 +1,51 @@
-/**
- * All of the CSS for your admin-specific functionality should be
- * included in this file.
- */
+.secure-form-wrapper {
+	margin-top: 40px;
+}
+
+.secure-form-wrapper .page-grid {
+	display: grid;
+	grid-template-columns: 1fr 260px;
+	grid-gap: 3em;
+    margin: 0 auto;
+    max-width: 1260px;
+}
+
+.secure-form-wrapper .sidebar-panel {
+	padding:2em;
+	background:white;
+	border: 1px solid #e0e0e0;
+	margin-bottom:2em;
+}
+
+.secure-form-wrapper .sidebar-panel img {
+	width: 100%;
+}
+
+.secure-form-wrapper .secure-form-admin textarea {
+    font-family: monospace;
+    width: 45em;
+}
+
+.secure-form-wrapper .secure-form-admin small {
+    display: block;
+	margin-top: 5px;
+}
+
+.secure-form-wrapper .alert {
+    margin-top: 20px;
+    padding: 1rem;
+    width: 100%;
+    font-weight: 500;
+}
+
+.secure-form-wrapper .alert-danger {
+    color: #c53030;
+    border: 1px solid #fc8181;
+    background-color: #fff5f5;
+}
+
+.secure-form-wrapper .alert-success {
+    color: #234e52;
+    border: 1px solid #38b2ac;
+    background-color: #e6fffa;
+}
