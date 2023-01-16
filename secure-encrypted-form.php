@@ -38,6 +38,11 @@ if ( ! defined( 'WPINC' ) ) {
 define( 'SECURE_ENCRYPTED_FORM_VERSION', '1.0.0' );
 
 /**
+ * Require composer and packages
+ */
+require plugin_dir_path( __FILE__ ) . 'src/vendor/autoload.php';
+
+/**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-secure-encrypted-form-activator.php
  */

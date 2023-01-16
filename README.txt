@@ -1,114 +1,112 @@
-=== Plugin Name ===
-Contributors: (this should be a list of wordpress.org userid's)
-Donate link: https://charrua.es
-Tags: comments, spam
-Requires at least: 3.0.1
-Tested up to: 3.4
-Stable tag: 4.3
+=== Secure Encrypted Form ===
+Contributors: danidub
+Donate link: https://charrua.es/donaciones/
+Tags: contact, form, contact form, openpgp, encrypted form, feedback, email, encryption, secure, secure form
+Requires at least: 4.9
+Tested up to: 6.1
+Stable tag: 1.0.0
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+This plugin adds a secure form in your website that uses OpenPGP encription to secure sensitive communications.
 
 == Description ==
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
+This plugin allows you to insert a *"secure form"* into your website through a simple shortocde. It is usefull when you need to **receive sensitive data of any kind, establishing a *"safe channel"***.
+The data is sent encrypted with your PGP public key.
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+= Usage =
 
-A few notes about the sections above:
+Just fill in some plugin options:
 
-*   "Contributors" is a comma separated list of wp.org/wp-plugins.org usernames
-*   "Tags" is a comma separated list of tags that apply to the plugin
-*   "Requires at least" is the lowest version that the plugin will work on
-*   "Tested up to" is the highest version that you've *successfully used to test the plugin*. Note that it might work on
-higher versions... this is just the highest one you've verified.
-*   Stable tag should indicate the Subversion "tag" of the latest stable version, or "trunk," if you use `/trunk/` for
-stable.
+* The destination email (your email)
+* Your PGP public key
 
-    Note that the `readme.txt` of the stable tag is the one that is considered the defining one for the plugin, so
-if the `/trunk/readme.txt` file says that the stable tag is `4.3`, then it is `/tags/4.3/readme.txt` that'll be used
-for displaying information about the plugin.  In this situation, the only thing considered from the trunk `readme.txt`
-is the stable tag pointer.  Thus, if you develop in trunk, you can update the trunk `readme.txt` to reflect changes in
-your in-development version, without having that information incorrectly disclosed about the current stable version
-that lacks those changes -- as long as the trunk's `readme.txt` points to the correct stable tag.
+Once the shortcode is placed into a page or post, it will render a form with the following fields:
 
-    If no stable tag is provided, it is assumed that trunk is stable, but you should specify "trunk" if that's where
-you put the stable version, in order to eliminate any doubt.
+* Message
+* Subject
+* Name
+* Email
+
+= How it works =
+The *message* field will be encrypted with your **PGP public key** and sent as an attachment in **ASCII** format to the destination email you have configured.
+
+When creating the plugin logic I have made sure that the *message* field **is never sent to the web server**, the data is previously encrypted (on the fly) using *OpenPGP.js* library in the user who is browsing the website.
+
+You will only be able to decrypt the content of the attached file if you have the PGP private key belonging to the public key with which the message was encrypted.
+
+*Remember that the purpose of the plugin is only to display a form on your website and encrypt the information that is sent through the "message" field. This plugin does not take care of decrypting the attached file, this task is left to each user in the way they want.*
+
+= Some usage examples =
+
+* Receive secret messages
+* Receiving passwords from clients or friends
+* Reception of sensitive information
+
+= Requirements =
+
+In order to use this plugin you need to have or create a **PGP key pair**. If you don't have your key pair generated you can browse the internet on how to generate it.
+There are many ways to generate the key, each have a different impact on security.
+
+= TIP on generating PGP key pair =
+One of the best ways of generating your PGP key pair is using a computer witout Internet connection and using [Tails OS](https://tails.boum.org).
+
+= Recommended software =
+
+* [GNU Privacy Guard (Linux, OS X, Windows)](https://gnupg.org)
+* [GPG Suite (OS X)](https://gpgtools.org)
+* [Gpg4win (Windows)](https://www.gpg4win.org/)
+
+= Support =
+
+When you cannot find the answer to your question on the FAQ section, check the [support forum](https://wordpress.org/support/plugin/secure-encrypted-form/) on WordPress.org. If you cannot locate any topics that solve to your particular issue, post a new topic for it.
+Remember this support is offered for free and can take some hours/days to answer and solve your issues.
+
+= Secure Contact Form needs your support =
+
+It is hard to continue development and support for this free plugin without contributions from users like you. **If you enjoy using Secure Contact Form and find it useful, please consider [making a donation](https://charrua.es/donaciones/)**. Your donation will help encourage and support the plugin's continued development and better user support.
+
+= Privacy notices =
+
+With the default configuration, this plugin, in itself, does not:
+
+* Track users by stealth
+* Write any user personal data to the database
+* Send any data to external servers
+* Use cookies
+
+= Translations =
+
+Actually the plugin ships in English and Spanish.
+More translations comming soon...
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
+1. Upload the entire `secure-encrypted-form` folder to the `/wp-content/plugins/` directory.
+1. Activate the plugin through the **Plugins** screen (**Plugins > Installed Plugins**).
 
-e.g.
-
-1. Upload `secure-encrypted-form.php` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place `<?php do_action('plugin_name_hook'); ?>` in your templates
+You will find **Secure Encrypted Form** menu in your WordPress admin screen.
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= How to prevent and filter SPAM? =
 
-An answer to that question.
-
-= What about foo bar? =
-
-Answer to foo bar dilemma.
+You can use some service like Google Recaptcha v3 for now. More comming soon.
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. Plugin options
+2. Plugin debug log
+3. Inserting through shortcode
+2. Form rendered
 
 == Changelog ==
 
-= 1.0 =
-* A change since the previous version.
-* Another change.
-
-= 0.5 =
-* List versions from most recent at top to oldest at bottom.
+= 1.0.0 =
+* Initial launch.
 
 == Upgrade Notice ==
 
-= 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
-
-= 0.5 =
-This version fixes a security related bug.  Upgrade immediately.
-
-== Arbitrary section ==
-
-You may provide arbitrary sections, in the same format as the ones above.  This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation."  Arbitrary sections will be shown below the built-in sections outlined above.
-
-== A brief Markdown Example ==
-
-Ordered list:
-
-1. Some feature
-1. Another feature
-1. Something else about the plugin
-
-Unordered list:
-
-* something
-* something else
-* third thing
-
-Here's a link to [WordPress](http://wordpress.org/ "Your favorite software") and one to [Markdown's Syntax Documentation][markdown syntax].
-Titles are optional, naturally.
-
-[markdown syntax]: http://daringfireball.net/projects/markdown/syntax
-            "Markdown is what the parser uses to process much of the readme file"
-
-Markdown uses email style notation for blockquotes and I've been told:
-> Asterisks for *emphasis*. Double it up  for **strong**.
-
-`<?php code(); // goes in backticks ?>`
+= 1.0.0 =
+Initial launch.

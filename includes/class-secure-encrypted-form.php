@@ -195,9 +195,6 @@ class Secure_Encrypted_Form {
 		$this->loader->add_action( 'wp_ajax_send_secure_form', $plugin_public, 'send_secure_form' );
 		$this->loader->add_action( 'wp_ajax_nopriv_send_secure_form', $plugin_public, 'send_secure_form' );
 
-		// Debug wp_mail errors.
-		$this->loader->add_action( 'wp_mail_failed', $plugin_public, 'debug_wp_mail_failure' );
-
 	}
 
 	/**

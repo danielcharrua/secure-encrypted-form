@@ -9,6 +9,10 @@
  * @subpackage Secure_Encrypted_Form/public
  */
 
+use Monolog\Logger;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\RotatingFileHandler;
+
 /**
  * The public-facing functionality of the plugin.
  *
@@ -40,6 +44,15 @@ class Secure_Encrypted_Form_Public {
 	private $version;
 
 	/**
+	 * The logger.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      Logger    $logger    The logger.
+	 */
+	private $logger;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since   1.0.0
@@ -50,6 +63,43 @@ class Secure_Encrypted_Form_Public {
 
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
+
+		$this->set_logger();
+
+	}
+
+	/**
+	 * Initialize the Monolog logger.
+	 *
+	 * @since    1.0.0
+	 */
+	private function set_logger() {
+
+		$upload_dir     = wp_upload_dir();
+		$plugin_dirname = $upload_dir['basedir'] . '/' . $this->plugin_name;
+
+		// Check folder or create.
+		if ( ! file_exists( $plugin_dirname ) ) {
+			wp_mkdir_p( $plugin_dirname );
+		}
+
+		// The default date format is "Y-m-d\TH:i:sP".
+		$date_format = 'Y-m-d\TH:i:s';
+
+		// the default output format is "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n"
+		// we now change the default output format according to our needs.
+		$output = "[%datetime%] %level_name%: %message% %context%\n";
+
+		// finally, create a formatter.
+		$formatter = new LineFormatter( $output, $date_format );
+
+		// Create a handler.
+		$rotating_file = new RotatingFileHandler( $plugin_dirname . '/log.log', 7 );
+		$rotating_file->setFormatter( $formatter );
+
+		// bind it to a logger object.
+		$this->logger = new Logger( 'plugin-log' );
+		$this->logger->pushHandler( $rotating_file );
 
 	}
 
@@ -157,6 +207,9 @@ class Secure_Encrypted_Form_Public {
 		// This is a secure process to validate if this request comes from a valid source.
 		check_ajax_referer( 'secure_form_nonce', 'security' );
 
+		// Activate wp_mail errors.
+		add_action( 'wp_mail_failed', array( $this, 'debug_wp_mail_failure' ) );
+
 		$errors = array();
 		$data   = array();
 
@@ -199,13 +252,22 @@ class Secure_Encrypted_Form_Public {
 			$body .= 'Email: ' . $email_field . '<br><br>';
 			$body .= esc_html__( 'Please find the message attached.', 'secure-encrypted-form' ) . '<br><br>';
 			$body .= '--<br>';
-			$body .= esc_html__( 'Sent with', 'secure-encrypted-form' ) . ' ' . $this->plugin_name . ' ' . $this->version . '<br>';
 			$body .= sprintf(
-				/* translators: %1$s: a tag, %2$s: closing a tag */
+				/* translators: %1$s is the plugin name and %2$s is the plugin version */
 				esc_html__(
-					'If you find this piece of software usefull please consider %1$sdonating to the author%2$s.',
+					'Sent with %1$s for WordPress v%2$s',
 					'secure-encrypted-form'
 				),
+				esc_html( $this->plugin_name ),
+				esc_html( $this->version )
+			);
+			$body .= sprintf(
+				/* translators: %1$s and %2$s are HTML a tags */
+				esc_html__(
+					'%1$sIf you find this piece of software usefull please consider %2$sdonating to the author%3$s.',
+					'secure-encrypted-form'
+				),
+				'<br>',
 				'<a href="' . esc_url( 'https://charrua.es/' ) . '">',
 				'</a>'
 			);
@@ -231,7 +293,7 @@ class Secure_Encrypted_Form_Public {
 				$data['success'] = true;
 				$data['message'] = esc_html__( 'Success: secure encrypted message sent.', 'secure-encrypted-form' );
 
-				$this->log_message( 'Secure email sent: ' . $email_field );
+				$this->logger->debug( 'Secure email sent: ', $email_field );
 			} else {
 
 				// This would be the wp_mail function failing to send the email. Eg the email on settings is wrong.
@@ -247,6 +309,9 @@ class Secure_Encrypted_Form_Public {
 			unlink( $filename );
 		}
 
+		// Disable wp_mail capture errors.
+		remove_action( 'wp_mail_failed', array( $this, 'debug_wp_mail_failure' ) );
+
 		echo wp_json_encode( $data );
 		wp_die();
 
@@ -260,41 +325,9 @@ class Secure_Encrypted_Form_Public {
 	 */
 	public function debug_wp_mail_failure( $wp_error ) {
 		$to = $wp_error->error_data['wp_mail_failed']['to'];
-		$this->log_message( 'Secure email not sent: ' . $to );
-		$this->log_message( $wp_error->errors );
-	}
-
-	/**
-	 * Log messages for debug
-	 *
-	 * @since   1.0.0
-	 * @param   mixed  $entry The data to log.
-	 * @param   string $mode The mode for inserting data 'a' for appending and 'w' for rewriting all.
-	 * @param   string $file The file to write to.
-	 */
-	public function log_message( $entry, $mode = 'a', $file = 'log' ) {
-
-		// Get WordPress uploads directory.
-		$upload_dir     = wp_upload_dir();
-		$plugin_dirname = $upload_dir['basedir'] . '/secure-encrypted-form';
-
-		// Check folder or create.
-		if ( ! file_exists( $plugin_dirname ) ) {
-			wp_mkdir_p( $plugin_dirname );
-		}
-
-		// If the entry is array, json_encode.
-		if ( is_array( $entry ) ) {
-			$entry = json_encode( $entry );
-		}
-
-		// Write the log file.
-		$file  = $plugin_dirname . '/' . $file . '.log';
-		$file  = fopen( $file, $mode );
-		$bytes = fwrite( $file, current_time( 'mysql' ) . ' -> ' . $entry . "\n" );
-		fclose( $file );
-
-		return $bytes;
+		$this->logger->error( 'Secure email not sent: ', $to );
+		$this->logger->error( 'Internal error code E2' );
+		$this->logger->error( 'wp_mail: ', $wp_error->errors );
 	}
 
 }
