@@ -2,7 +2,7 @@
 Contributors: danidub
 Donate link: https://charrua.es/donaciones/
 Tags: contact, form, contact form, openpgp, encrypted form, feedback, email, encryption, secure, secure form
-Requires at least: 4.9
+Requires at least: 5.3
 Tested up to: 6.1
 Stable tag: 1.0.0
 License: GPLv2 or later
