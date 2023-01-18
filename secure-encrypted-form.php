@@ -14,7 +14,6 @@
  *
  * @wordpress-plugin
  * Plugin Name:       Secure Encrypted Form
- * Plugin URI:        https://charrua.es
  * Description:       Display a form on any page or post and receive secure (encrypted) communications using OpenPGP.
  * Version:           1.0.0
  * Author:            Daniel Pereyra Costas
