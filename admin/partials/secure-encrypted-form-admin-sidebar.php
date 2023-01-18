@@ -27,7 +27,7 @@
 		?>
 	</p>
 	<a href="lightning:LNURL1DP68GURN8GHJ7MRWW3UXYMM59E3K7MF09EMK2MRV944KUMMHDCHKCMN4WFK8QTMYV9HXJETVWP3K7UM5V9ES4MRMQW">
-		<img src="<?php echo esc_url( plugin_dir_url( dirname( __FILE__ ) ) . 'images/qr-lnurl.svg' ); ?>" alt="Donation QR link" />
+		<img src="<?php echo esc_url( plugin_dir_url( dirname( __FILE__ ) ) . 'img/qr-lnurl.svg' ); ?>" alt="Donation QR link" />
 	</a>
 	<p>
 		<?php
