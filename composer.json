@@ -1,4 +1,13 @@
 {
+    "license": "GPL-2.0-or-later", 
+    "authors": [
+        {
+            "name": "Daniel Pereyra Costas",
+            "email": "hola@charrua.es",
+            "homepage": "https://charrua.es",
+            "role": "Developer"
+        }
+    ],
     "config": {
 		"vendor-dir": "src/vendor"
 	},

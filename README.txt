@@ -94,6 +94,10 @@ You will find **Secure Encrypted Form** menu in your WordPress admin screen.
 
 You can use some service like Google Recaptcha v3 for now. More comming soon.
 
+= My server is not sending emails =
+
+Your server may be restricted or disabled to send emails. In that case you can use a SMTP plugin to send authenticated emails as [WP Mail SMTP](https://es.wordpress.org/plugins/wp-mail-smtp/).
+
 == Screenshots ==
 
 1. Plugin options
