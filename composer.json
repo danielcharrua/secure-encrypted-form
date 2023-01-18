@@ -9,7 +9,7 @@
         }
     ],
     "config": {
-		"vendor-dir": "src/vendor"
+		"vendor-dir": "lib/vendor"
 	},
     "require": {
         "monolog/monolog": "^2.8"

@@ -145,7 +145,7 @@ class Secure_Encrypted_Form_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( 'openpgpjs', plugin_dir_url( dirname( __FILE__ ) ) . 'src/js/openpgp.min.js', array(), '5.5.0', true );
+		wp_enqueue_script( 'openpgpjs', plugin_dir_url( dirname( __FILE__ ) ) . 'lib/js/openpgp.min.js', array(), '5.5.0', true );
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/secure-encrypted-form-public.js', array( 'jquery', 'openpgpjs' ), $this->version, false );
 
 		/**

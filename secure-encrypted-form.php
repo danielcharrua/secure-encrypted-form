@@ -40,7 +40,7 @@ define( 'SECURE_ENCRYPTED_FORM_VERSION', '1.0.0' );
 /**
  * Require composer and packages
  */
-require plugin_dir_path( __FILE__ ) . 'src/vendor/autoload.php';
+require plugin_dir_path( __FILE__ ) . 'lib/vendor/autoload.php';
 
 /**
  * The code that runs during plugin activation.
