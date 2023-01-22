@@ -1,4 +1,7 @@
-*.code-workspace
+.vscode
 *.DS_Store
 /lib/vendor
+node_modules
+package-lock.json
+dist.zip
 /assets/src
