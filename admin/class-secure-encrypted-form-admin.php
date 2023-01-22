@@ -191,6 +191,42 @@ class Secure_Encrypted_Form_Admin {
 	}
 
 	/**
+	 * Adds 'Settings' link to plugin entry in the Plugins list.
+	 *
+	 * @since    1.0.0
+	 * @param    Array $actions    An array of plugin action links..
+	 */
+	public function add_action_links( $actions ) {
+
+		// Build and escape the settings URL.
+		$settings_url = esc_url(
+			add_query_arg(
+				'page',
+				'secure-encrypted-form',
+				get_admin_url() . 'admin.php'
+			)
+		);
+
+		// Create the settings link.
+		$settings_link = '<a href="' . $settings_url . '">' . __( 'Settings', 'secure-encrypted-form' ) . '</a>';
+
+		// Build and escape the donations URL.
+		$donations_url = esc_url( 'https://charrua.es/donaciones/' );
+
+		// Create the donations link.
+		$donations_link = '<a href="' . $donations_url . '" target="_blank" rel="noopener noreferrer"><strong style="color: #11967A; display: inline;">' . __( 'Donate', 'secure-encrypted-form' ) . '</strong></a>';
+
+		// Adds the link to the end of the array.
+		array_unshift(
+			$actions,
+			$donations_link,
+			$settings_link
+		);
+
+		return $actions;
+	}
+
+	/**
 	 * Add plugin admin settings page under tools.
 	 *
 	 * @since    1.0.0
@@ -415,7 +451,8 @@ class Secure_Encrypted_Form_Admin {
 
 		// Sanitize and define fields.
 		if ( ! empty( $_POST['message'] ) ) {
-			$message_field = json_decode( sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) );
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+			$message_field = sanitize_textarea_field( json_decode( wp_unslash( $_POST['message'] ) ) );
 		}
 
 		// Message subject.

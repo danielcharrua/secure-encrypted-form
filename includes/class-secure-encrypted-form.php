@@ -153,6 +153,7 @@ class Secure_Encrypted_Form {
 
 		$plugin_admin = new Secure_Encrypted_Form_Admin( $this->get_plugin_name(), $this->get_version() );
 
+		$this->loader->add_filter( 'plugin_action_links_secure-encrypted-form/secure-encrypted-form.php', $plugin_admin, 'add_action_links' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_admin_settings_page' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'secure_encrypted_form_page_init' );
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'show_incomplete_settings_notice' );

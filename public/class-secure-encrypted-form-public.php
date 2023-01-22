@@ -242,7 +242,8 @@ class Secure_Encrypted_Form_Public {
 			$name_field    = sanitize_text_field( wp_unslash( $_POST['name'] ) );
 			$email_field   = sanitize_email( wp_unslash( $_POST['email'] ) );
 			$subject_field = sanitize_text_field( wp_unslash( $_POST['subject'] ) );
-			$message_field = json_decode( sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) );
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+			$message_field = sanitize_textarea_field( json_decode( wp_unslash( $_POST['message'] ) ) );
 
 			// Message subject.
 			$subject = esc_html__( 'Secure message:', 'secure-encrypted-form' ) . ' ' . $subject_field;
