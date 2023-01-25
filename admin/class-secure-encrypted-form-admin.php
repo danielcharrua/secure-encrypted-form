@@ -194,11 +194,11 @@ class Secure_Encrypted_Form_Admin {
 	 * Adds 'Settings' link to plugin entry in the Plugins list.
 	 *
 	 * @since    1.0.0
-	 * @param    Array $actions    An array of plugin action links..
+	 * @param    Array $actions    An array of plugin action links.
+	 * @see      https://developer.wordpress.org/reference/hooks/plugin_action_links_plugin_file/
 	 */
 	public function add_action_links( $actions ) {
 
-		// Build and escape the settings URL.
 		$settings_url = esc_url(
 			add_query_arg(
 				'page',
@@ -207,16 +207,12 @@ class Secure_Encrypted_Form_Admin {
 			)
 		);
 
-		// Create the settings link.
 		$settings_link = '<a href="' . $settings_url . '">' . __( 'Settings', 'secure-encrypted-form' ) . '</a>';
 
-		// Build and escape the donations URL.
 		$donations_url = esc_url( 'https://charrua.es/donaciones/' );
 
-		// Create the donations link.
 		$donations_link = '<a href="' . $donations_url . '" target="_blank" rel="noopener noreferrer"><strong style="color: #11967A; display: inline;">' . __( 'Donate', 'secure-encrypted-form' ) . '</strong></a>';
 
-		// Adds the link to the end of the array.
 		array_unshift(
 			$actions,
 			$donations_link,
