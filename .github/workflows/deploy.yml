@@ -15,7 +15,7 @@ jobs:
       run: |
         ls
         composer install --no-dev --optimize-autoloader
-        rm composer.json && rm composer.lock && rm .vscode
+        rm composer.json && rm composer.lock && rm -rf .vscode
         ls
   
     - name: WordPress Plugin Deploy
