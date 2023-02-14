@@ -4,4 +4,4 @@ node_modules
 package-lock.json
 package.json
 dist.zip
-/assets/src
+/.wordpress-org/src
