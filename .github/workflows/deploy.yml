@@ -13,11 +13,7 @@ jobs:
 
     - name: Build
       run: |
-        ls
         composer install --no-dev --optimize-autoloader
-        rm composer.json && rm composer.lock && rm -rf .vscode
-        ls
-        ls lib
   
     - name: WordPress Plugin Deploy
       id: deploy
