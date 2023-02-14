@@ -1,7 +1,7 @@
-.vscode
 *.DS_Store
 /lib/vendor
 node_modules
 package-lock.json
+package.json
 dist.zip
 /assets/src
