@@ -269,7 +269,7 @@ class Secure_Encrypted_Form_Public {
 					'secure-encrypted-form'
 				),
 				'<br>',
-				'<a href="' . esc_url( 'https://charrua.es/' ) . '">',
+				'<a href="' . esc_url( 'https://charrua.es/donaciones' ) . '">',
 				'</a>'
 			);
 

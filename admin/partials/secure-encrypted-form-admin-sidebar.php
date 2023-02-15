@@ -34,7 +34,7 @@
 				'%1$sDonate here%2$s.',
 				'secure-encrypted-form'
 			),
-			'<a href="' . esc_url( 'https://charrua.es/donations' ) . '">',
+			'<a href="' . esc_url( 'https://charrua.es/donaciones' ) . '">',
 			'</a>',
 		);
 		?>
