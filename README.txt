@@ -4,7 +4,7 @@ Donate link: https://charrua.es/donaciones/
 Tags: contact, form, contact form, openpgp, encrypted form, feedback, email, encryption, secure, secure form
 Requires at least: 5.3
 Tested up to: 6.1
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,19 @@ The data is sent encrypted with your PGP public key.
 Just fill in some plugin options:
 
 * The destination email (your email)
-* Your PGP public key
+* Your PGP public key in ASCII armored version
+
+For exporting your public key you can run in any console (must have GnuPG):
+
+`gpg --armor --export username@email`
+
+Remember your public key needs to be exported in ASCII armored version, this means that will be surrounded with:
+
+`-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+your-long-key-string-will-be-here
+
+-----END PGP PUBLIC KEY BLOCK-----`
 
 Once the shortcode is placed into a page or post, it will render a form with the following fields:
 
