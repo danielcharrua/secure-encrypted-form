@@ -294,7 +294,10 @@ class Secure_Encrypted_Form_Public {
 				$data['success'] = true;
 				$data['message'] = esc_html__( 'Success: secure encrypted message sent.', 'secure-encrypted-form' );
 
-				$this->logger->debug( 'Secure email sent: ', array( 'to' => $email_field ) );
+				$this->logger->debug( 'Secure email sent: ', array( 
+					'from' => $email_field,
+					'to'   => $to,
+				) );
 			} else {
 
 				// This would be the wp_mail function failing to send the email. Eg the email on settings is wrong.
