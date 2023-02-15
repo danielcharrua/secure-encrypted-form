@@ -54,6 +54,19 @@
 			<p>
 				<?php echo esc_html__( 'If you are not sure if your website is sending emails correctly, you can use this button to test and send an email. Have in mind that your server is in charge of sending emails, maybe you need to install a plugin for using SMTP. Also, always save settings before sending test emails.', 'secure-encrypted-form' ); ?>
 			</p>
+			<p>
+				<?php
+				echo sprintf(
+					/* Translators: %1$s and %2$s are HTML a tags, please do not translate this parameter. */
+					esc_html__(
+						'You can also check the plugin logs for further information. %1$sCheck logs%2$s.',
+						'secure-encrypted-form'
+					),
+					'<a href="' . esc_url( '/wp-admin/admin.php?page=secure-encrypted-form-debug-log' ) . '">',
+					'</a>',
+					);
+				?>
+			</p>
 			<form method="post" id="secure-form-test">
 				<input type="submit" name="submit" class="button" value="<?php echo esc_attr__( 'Send test email', 'secure-encrypted-form' ); ?>">
 			</form>
