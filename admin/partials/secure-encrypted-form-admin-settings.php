@@ -67,6 +67,9 @@
 					);
 				?>
 			</p>
+
+			<?php $this->check_php_mail_func(); ?>
+
 			<form method="post" id="secure-form-test">
 				<input type="submit" name="submit" class="button" value="<?php echo esc_attr__( 'Send test email', 'secure-encrypted-form' ); ?>">
 			</form>

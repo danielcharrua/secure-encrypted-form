@@ -49,6 +49,13 @@
     background-color: #e6fffa;
 }
 
+.secure-form-wrapper .alert-warning {
+    color: #C05621;
+    border: 1px solid #C05621;
+    background-color: #FFFAF0;
+    font-weight: normal;
+}
+
 .secure-form-wrapper .log-viewer {
 	background: #fff;
 	border: 1px solid #e5e5e5;
@@ -64,4 +71,8 @@
     white-space: -pre-wrap;      /* Opera 4-6 */
     white-space: -o-pre-wrap;    /* Opera 7 */
     word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+#secure-form-test {
+    margin-top: 20px;
 }
