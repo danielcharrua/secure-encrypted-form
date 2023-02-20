@@ -165,6 +165,7 @@ class Secure_Encrypted_Form_Admin {
 				'ajaxUrl'          => admin_url( 'admin-ajax.php' ),
 				'nonce'            => wp_create_nonce( 'secure_form_nonce' ),
 				'publicKeyArmored' => get_option( 'secure_encrypted_form_option_name' )['public_key'],
+				'errorOnKey'       => esc_html__( 'Error E4: it seems to be an error/typo on your public key string. Please export it again and paste it in ASCII-Armor.', 'secure-encrypted-form' ),
 			)
 		);
 	}

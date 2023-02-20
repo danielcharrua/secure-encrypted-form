@@ -159,6 +159,7 @@ class Secure_Encrypted_Form_Public {
 				'ajaxUrl'          => admin_url( 'admin-ajax.php' ),
 				'nonce'            => wp_create_nonce( 'secure_form_nonce' ),
 				'publicKeyArmored' => get_option( 'secure_encrypted_form_option_name' )['public_key'],
+				'errorOnKey'       => esc_html__( 'Error E5: it seems to be an error/typo on the encryption key. Please contact the web administrator.', 'secure-encrypted-form' ),
 			)
 		);
 	}

@@ -15,7 +15,19 @@
 			// Disable form
 			$( '.secure-form :input' ).prop( 'disabled', true );
 
-			let publicKey = await openpgp.readKey( { armoredKey: data.publicKeyArmored } );
+			// Read public key
+			try {
+				let publicKey = await openpgp.readKey( { armoredKey: data.publicKeyArmored } );
+			} catch (error) {
+				// Give failed feedback to user (Error E4)
+				$( '.secure-form' ).append( 
+					'<div class="alert alert-danger">' + data.errorOnKey + '</div>'
+				);
+
+				return;
+			}
+
+
 			let message = $( '#message' ).val();
 
 			const encrypted = await openpgp.encrypt({
