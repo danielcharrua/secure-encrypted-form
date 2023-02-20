@@ -52,7 +52,7 @@
 				<?php echo esc_html__( 'Having problems?', 'secure-encrypted-form' ); ?>
 			</h2>
 			<p>
-				<?php echo esc_html__( 'If you are not sure if your website is sending emails correctly, you can use this button to test and send an email. Have in mind that your server is in charge of sending emails, maybe you need to install a plugin for using SMTP. Also, always save settings before sending test emails.', 'secure-encrypted-form' ); ?>
+				<?php echo esc_html__( 'If you are not sure if your website is sending emails correctly, you can use this button to test and send an email. Have in mind that your server is in charge of sending emails. You may need to install a plugin for authenticating email using SMTP. Remember to always save settings before sending test emails.', 'secure-encrypted-form' ); ?>
 			</p>
 			<p>
 				<?php
