@@ -191,6 +191,24 @@ class Secure_Encrypted_Form_Admin {
 	}
 
 	/**
+	 * Check if PHP mail function is available as some hosts disable it by default.
+	 *
+	 * @since    1.0.1
+	 */
+	public function check_php_mail_func() {
+
+		if ( ! function_exists( 'mail' ) ) {
+			$class     = 'notice notice-error';
+			$message   = __( 'Secure Encrypted Form: it seems that PHP mail() function is disabled in your server. Please contact your hosting provider or use a SMTP plugin.', 'secure-encrypted-form' );
+			$url       = '/wp-admin/admin.php?page=secure-encrypted-form';
+			$link_text = __( 'Complete setup.', 'secure-encrypted-form' );
+
+			printf( '<div class="%1$s"><p>%2$s <a href="%3$s">%4$s</a></p></div>', esc_attr( $class ), esc_html( $message ), esc_url( $url ), esc_html( $link_text ) );
+		}
+
+	}
+
+	/**
 	 * Adds 'Settings' link to plugin entry in the Plugins list.
 	 *
 	 * @since    1.0.0

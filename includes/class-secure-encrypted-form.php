@@ -157,6 +157,7 @@ class Secure_Encrypted_Form {
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_admin_settings_page' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'secure_encrypted_form_page_init' );
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'show_incomplete_settings_notice' );
+		$this->loader->add_action( 'admin_notices', $plugin_admin, 'check_php_mail_func' );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
