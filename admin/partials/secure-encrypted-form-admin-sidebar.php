@@ -63,7 +63,7 @@
 				'%1$sRate plugin%2$s.',
 				'secure-encrypted-form'
 			),
-			'<a href="' . esc_url( 'https://wordpress.org/plugins/secure-encrypted-form' ) . '">',
+			'<a href="' . esc_url( 'https://wordpress.org/support/plugin/secure-encrypted-form/reviews/#new-post' ) . '">',
 			'</a>',
 		);
 		?>
