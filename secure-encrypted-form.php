@@ -48,6 +48,7 @@ require plugin_dir_path( __FILE__ ) . 'lib/vendor/autoload.php';
 function activate_secure_encrypted_form() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-secure-encrypted-form-activator.php';
 	Secure_Encrypted_Form_Activator::activate();
+	Secure_Encrypted_Form_Activator::define_plugin_options();
 }
 
 /**

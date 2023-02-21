@@ -33,4 +33,25 @@ class Secure_Encrypted_Form_Activator {
 
 	}
 
+	/**
+	 * Check & define plugin options.
+	 *
+	 * On plugin activation, if we dont find the options we initialize them. As they
+	 * are arrays and we check them later in code, we need to define those indexes.
+	 *
+	 * @since    1.0.1
+	 */
+	public static function define_plugin_options() {
+
+		$plugin_options = array(
+			'email'      => '',
+			'public_key' => '',
+		);
+
+		if ( ! get_option( 'secure_encrypted_form_option_name' ) ) {
+			add_option( 'secure_encrypted_form_option_name', $plugin_options );
+		}
+
+	}
+
 }
