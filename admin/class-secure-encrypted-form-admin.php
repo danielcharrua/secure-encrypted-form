@@ -545,10 +545,10 @@ class Secure_Encrypted_Form_Admin {
 	public function check_php_mail_func() {
 
 		if ( ! function_exists( 'mail' ) ) {
-			$class     = 'alert alert-warning';
-			$message   = __( 'It seems that PHP mail() function is disabled on your server. Please contact your hosting provider or use a SMTP plugin.', 'secure-encrypted-form' );
+			$class   = 'alert alert-warning';
+			$message = __( 'It seems that PHP mail() function is disabled on your server. Please contact your hosting provider or use a SMTP plugin.', 'secure-encrypted-form' );
 
-			printf( '<div class="%1$s"><p><span class="dashicons dashicons-warning"></span> %2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
+			printf( '<div class="%1$s"><span class="dashicons dashicons-warning"></span> %2$s</div>', esc_attr( $class ), esc_html( $message ) );
 		}
 
 	}
