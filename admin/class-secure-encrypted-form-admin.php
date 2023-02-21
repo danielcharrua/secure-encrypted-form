@@ -403,7 +403,7 @@ class Secure_Encrypted_Form_Admin {
 	public function email_callback( $args ) {
 
 		printf(
-			'<input class="regular-text" type="text" name="secure_encrypted_form_option_name[email]" id="email" value="%1s"><small>%2s</small>',
+			'<input class="regular-text" type="text" name="secure_encrypted_form_option_name[email]" id="email" value="%s"><small>%s</small>',
 			isset( $this->options['email'] ) ? esc_attr( $this->options['email'] ) : '',
 			esc_html( $args['description'] ),
 		);
@@ -419,7 +419,7 @@ class Secure_Encrypted_Form_Admin {
 	public function public_key_callback( $args ) {
 
 		printf(
-			'<textarea class="large-text" rows="20" name="secure_encrypted_form_option_name[public_key]" id="public_key">%1s</textarea><small>%2s</small>',
+			'<textarea class="large-text" rows="20" name="secure_encrypted_form_option_name[public_key]" id="public_key">%s</textarea><small>%s</small>',
 			isset( $this->options['public_key'] ) ? esc_attr( $this->options['public_key'] ) : '',
 			esc_html( $args['description'] ),
 		);
