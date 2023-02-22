@@ -64,7 +64,7 @@
 					),
 					'<a href="' . esc_url( '/wp-admin/admin.php?page=secure-encrypted-form-debug-log' ) . '">',
 					'</a>',
-					);
+				);
 				?>
 			</p>
 
@@ -72,6 +72,7 @@
 
 			<form method="post" id="secure-form-test">
 				<input type="submit" name="submit" class="button" value="<?php echo esc_attr__( 'Send test email', 'secure-encrypted-form' ); ?>">
+				<span class="spinner"></span>
 			</form>
 		</div>
 		<!-- Sidebar -->

@@ -494,16 +494,25 @@ class Secure_Encrypted_Form_Admin {
 			'Reply-To: John Doe <john@doe.com>',
 		);
 
-		$sent = wp_mail( $to, $subject, $body, $headers, $attachments );
+		// Try to send mail.
+		// Also diagnose if PHP mail() function is disabled pn webhost.
+		try {
+			$sent = wp_mail( $to, $subject, $body, $headers, $attachments );
+		} catch ( Error $e ) {
+			if ( str_contains( $e->getMessage(), 'Call to undefined function PHPMailer\PHPMailer\mail()' ) ) {
+				$sent = 'php_mail_fail';
+			}
+		}
 
-		// Log action.
-		if ( $sent ) {
+		// User feedback and log.
+		if ( true === $sent ) {
+
 			$data['success'] = true;
 			$data['message'] = esc_html__( 'Success: secure encrypted message [test] sent.', 'secure-encrypted-form' );
 
 			$this->logger->debug( 'Secure email [test] sent', array( 'to' => $to ) );
 
-		} else {
+		} elseif ( false === $sent ) {
 
 			// This would be the wp_mail function failing to send the email. Eg the email on settings is wrong.
 			$errors['server'] = true;
@@ -512,6 +521,15 @@ class Secure_Encrypted_Form_Admin {
 			$data['message']  = esc_html__( 'Error E3: secure encrypted message could not be sent, see debug log please.', 'secure-encrypted-form' );
 
 			// The error log is inyected by another function (debug_wp_mail_failure) to capture also the error code form wp_mail.
+		} elseif ( 'php_mail_fail' === $sent ) {
+
+			$errors['server'] = true;
+			$data['success']  = false;
+			$data['errors']   = $errors;
+			$data['message']  = esc_html__( 'Error E6: secure encrypted message could not be sent, seems that you are sending emails with PHP mail() function and is disabled by your webhost.', 'secure-encrypted-form' );
+
+			$this->logger->error( 'Secure email [test] not sent: ', array( 'to' => $to ) );
+			$this->logger->error( 'Internal error code E6, PHP mail() function is disabled on webhost.' );
 		}
 
 		// Delete temp file (attachment).

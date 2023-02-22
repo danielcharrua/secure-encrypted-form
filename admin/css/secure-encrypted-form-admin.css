@@ -76,3 +76,7 @@
 #secure-form-test {
     margin-top: 20px;
 }
+
+#secure-form-test .spinner {
+    float: none;
+}

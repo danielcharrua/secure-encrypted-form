@@ -14,15 +14,20 @@
 
 			// Disable form
 			$( '.secure-form :input' ).prop( 'disabled', true );
+			$( '.secure-form' ).append( '<div class="spinner-wrapper"><span class="spinner"></span></div>' );
 
 			// Read public key
+			let publicKey;
+			
 			try {
-				let publicKey = await openpgp.readKey( { armoredKey: data.publicKeyArmored } );
+				publicKey = await openpgp.readKey( { armoredKey: data.publicKeyArmored } );
 			} catch (error) {
-				// Give failed feedback to user (Error E4)
+				// Give failed feedback to user
 				$( '.secure-form' ).append( 
 					'<div class="alert alert-danger">' + data.errorOnKey + '</div>'
 				);
+
+				$( '.spinner-wrapper' ).remove();
 
 				return;
 			}
@@ -82,20 +87,19 @@
 							);
 						}
 
-						if (response.errors.server) {
-							// Give failed feedback to user
-							$( '.secure-form' ).append( 
-								'<div class="alert alert-danger">' + response.message + '</div>'
-							);
+						// Give failed feedback to user
+						$( '.secure-form' ).append( 
+							'<div class="alert alert-danger">' + response.message + '</div>'
+						);
 
-							// Delete alert message
-							setTimeout(function() { 
-								$( '.secure-form .alert' ).remove();
-							}, 10000);
-						}
+						// Delete alert message
+						setTimeout(function() { 
+							$( '.secure-form .alert' ).remove();
+						}, 10000);
 						
 						// Enable form
 						$( '.secure-form :input' ).prop( 'disabled', false );
+						$( '.spinner-wrapper' ).remove();
 
 					} else {
 						$( '.secure-form' ).append( 
@@ -110,6 +114,7 @@
 
 						// Enable form
 						$( '.secure-form :input' ).prop( 'disabled', false );
+						$( '.spinner-wrapper' ).remove();
 
 						// Delete alert message
 						setTimeout(function() { 
@@ -124,6 +129,7 @@
 
 					// Enable form
 					$( '.secure-form :input' ).prop( 'disabled', false );
+					$( '.spinner-wrapper' ).remove();
 
 					// Delete alert message
 					setTimeout(function() { 

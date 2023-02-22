@@ -159,7 +159,7 @@ class Secure_Encrypted_Form_Public {
 				'ajaxUrl'          => admin_url( 'admin-ajax.php' ),
 				'nonce'            => wp_create_nonce( 'secure_form_nonce' ),
 				'publicKeyArmored' => get_option( 'secure_encrypted_form_option_name' )['public_key'],
-				'errorOnKey'       => esc_html__( 'Error E5: it seems to be an error/typo on the encryption key. Please contact the web administrator.', 'secure-encrypted-form' ),
+				'errorOnKey'       => esc_html__( 'Error: it seems to be an error/typo on the encryption key. Please contact the web administrator.', 'secure-encrypted-form' ),
 			)
 		);
 	}
@@ -233,7 +233,7 @@ class Secure_Encrypted_Form_Public {
 		if ( ! empty( $errors ) ) {
 			$data['success'] = false;
 			$data['errors']  = $errors;
-			$data['message'] = esc_html__( 'Error E1: secure encrypted message could not be sent, try again later.', 'secure-encrypted-form' );
+			$data['message'] = esc_html__( 'Validation error: please check form fields for feedback.', 'secure-encrypted-form' );
 		} else {
 
 			// This is the email where you want to send the comments, defined in options.
@@ -288,26 +288,49 @@ class Secure_Encrypted_Form_Public {
 				'Reply-To: ' . $name_field . ' <' . $email_field . '>',
 			);
 
-			$sent = wp_mail( $to, $subject, $body, $headers, $attachments );
+			// Try to send mail.
+			// Also diagnose if PHP mail() function is disabled pn webhost.
+			try {
+				$sent = wp_mail( $to, $subject, $body, $headers, $attachments );
+			} catch ( Error $e ) {
+				if ( str_contains( $e->getMessage(), 'Call to undefined function PHPMailer\PHPMailer\mail()' ) ) {
+					$sent = 'php_mail_fail';
+				}
+			}
 
-			// Log action.
-			if ( $sent ) {
+			// User feedback and log.
+			if ( true === $sent ) {
+
 				$data['success'] = true;
 				$data['message'] = esc_html__( 'Success: secure encrypted message sent.', 'secure-encrypted-form' );
 
-				$this->logger->debug( 'Secure email sent: ', array( 
-					'from' => $email_field,
-					'to'   => $to,
-				) );
-			} else {
+				$this->logger->debug(
+					'Secure email sent: ',
+					array(
+						'from'    => $email_field,
+						'to'      => $to,
+						'subject' => $subject,
+					)
+				);
+
+			} elseif ( false === $sent ) {
 
 				// This would be the wp_mail function failing to send the email. Eg the email on settings is wrong.
 				$errors['server'] = true;
 				$data['success']  = false;
 				$data['errors']   = $errors;
-				$data['message']  = esc_html__( 'Error E2: secure encrypted message could not be sent, please contact website owner.', 'secure-encrypted-form' );
+				$data['message']  = esc_html__( 'Error: secure encrypted message could not be sent, please contact website owner.', 'secure-encrypted-form' );
 
 				// The error log is inyected by another function (debug_wp_mail_failure) to capture also the error code form wp_mail.
+			} elseif ( 'php_mail_fail' === $sent ) {
+
+				$errors['server'] = true;
+				$data['success']  = false;
+				$data['errors']   = $errors;
+				$data['message']  = esc_html__( 'Error: secure encrypted message could not be sent, please contact website owner.', 'secure-encrypted-form' );
+
+				$this->logger->error( 'Secure email not sent: ', array( 'to' => $to ) );
+				$this->logger->error( 'PHP mail() function is disabled on webhost.' );
 			}
 
 			// Delete temp file (attachment).
