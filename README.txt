@@ -8,7 +8,7 @@ Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin adds a secure form in your website that uses OpenPGP encription to secure sensitive communications.
+This plugin adds a secure form in your website that uses OpenPGP encryption to secure sensitive communications.
 
 == Description ==
 
@@ -22,17 +22,22 @@ Just fill in some plugin options:
 * The destination email (your email)
 * Your PGP public key in ASCII armored version
 
-For exporting your public key you can run in any console (must have GnuPG):
+Hint: to see your private key you can enter your computer console and run two commands, one to list and one to export (must have GnuPG):
 
-`gpg --armor --export username@email`
+`
+gpg --list-keys
+gpg --armor --export username@email
+`
 
 Remember your public key needs to be exported in ASCII armored version, this means that will be surrounded with:
 
-`-----BEGIN PGP PUBLIC KEY BLOCK-----
+`
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
 your-long-key-string-will-be-here
 
------END PGP PUBLIC KEY BLOCK-----`
+-----END PGP PUBLIC KEY BLOCK-----
+`
 
 Once the shortcode is placed into a page or post, it will render a form with the following fields:
 
@@ -90,8 +95,8 @@ With the default configuration, this plugin, in itself, does not:
 
 = Translations =
 
-Actually the plugin ships in English and Spanish.
-More translations comming soon...
+Actually the plugin ships in English and is translated to Spanish.
+You can contribute and [translate this plugin to your own language](https://translate.wordpress.org/projects/wp-plugins/secure-encrypted-form/).
 
 == Installation ==
 
@@ -108,7 +113,7 @@ You can use some service like Google Recaptcha v3 for now. More comming soon.
 
 = My server is not sending emails =
 
-Your server may be restricted or disabled to send emails. In that case you can use a SMTP plugin to send authenticated emails as [WP Mail SMTP](https://es.wordpress.org/plugins/wp-mail-smtp/).
+Your server may be restricted or disabled to send emails. In that case you can use a SMTP plugin to send authenticated emails as [WP Mail SMTP](https://es.wordpress.org/plugins/wp-mail-smtp/). Always remember to check your SPAM folder.
 
 == Screenshots ==
 
@@ -119,10 +124,23 @@ Your server may be restricted or disabled to send emails. In that case you can u
 
 == Changelog ==
 
+= 1.0.1 =
+* Fixed donation links.
+* Added logs link on admin.
+* Added ‘from’ and ‘to’ parameters on logs.
+* Added detection for PHP mail() function.
+* Updated feedback messages.
+* Fixed initialization of plugin options, thanks to @nilovelez for commenting the problem.
+* Fixed options leading spaces on inputs.
+* Added loading status icon.
+
 = 1.0.0 =
 * Initial launch.
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+Fixed minor bugs, improved debug log, user feedback & UI/UX.
 
 = 1.0.0 =
 Initial launch.
