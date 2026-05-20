@@ -173,26 +173,26 @@ class Secure_Encrypted_Form_Public {
 	public function secure_encrypted_form_shortcode( $atts ) {
 
 		$form  = '<div class="secure-form">';
-		$form .= '<div id="message-group" class="form-group">';
-		$form .= '<label for="message">' . esc_html__( 'Message', 'secure-encrypted-form' ) . '</label>';
-		$form .= '<textarea id="message" name="message" rows="5"></textarea>';
-		$form .= '</div>';
 		$form .= '<form id="sform" method="post">';
-		$form .= '<div id="subject-group" class="form-group">';
-		$form .= '<label for="subject">' . esc_html__( 'Subject', 'secure-encrypted-form' ) . '</label>';
-		$form .= '<input type="text" id="subject" name="subject">';
-		$form .= '</div>';
 		$form .= '<div id="name-group" class="form-group">';
 		$form .= '<label for="name">' . esc_html__( 'Your name', 'secure-encrypted-form' ) . '</label>';
 		$form .= '<input type="text" id="name" name="name">';
 		$form .= '</div>';
 		$form .= '<div id="email-group" class="form-group">';
 		$form .= '<label for="email">' . esc_html__( 'Your email', 'secure-encrypted-form' ) . '</label>';
-		$form .= '<input type="text" id="email" name="email">';
+		$form .= '<input type="email" id="email" name="email">';
+		$form .= '</div>';
+		$form .= '<div id="subject-group" class="form-group">';
+		$form .= '<label for="subject">' . esc_html__( 'Subject', 'secure-encrypted-form' ) . '</label>';
+		$form .= '<input type="text" id="subject" name="subject">';
 		$form .= '</div>';
 		$form .= '<input type="hidden" id="encryptedMessage" name="encryptedMessage">';
-		$form .= '<input type="submit" name="submit" value="' . esc_attr__( 'Submit', 'secure-encrypted-form' ) . '">';
 		$form .= '</form>';
+		$form .= '<div id="message-group" class="form-group">';
+		$form .= '<label for="message">' . esc_html__( 'Message', 'secure-encrypted-form' ) . '</label>';
+		$form .= '<textarea id="message" name="message" rows="5"></textarea>';
+		$form .= '</div>';
+		$form .= '<input type="submit" form="sform" name="submit" value="' . esc_attr__( 'Submit', 'secure-encrypted-form' ) . '">';
 		$form .= '</div>';
 
 		return $form;

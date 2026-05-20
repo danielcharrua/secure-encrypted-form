@@ -31,11 +31,23 @@
 
 			let message = "This is a test message :)";
 
-			const encrypted = await openpgp.encrypt({
-				message: await openpgp.createMessage( { text: message } ),
-				encryptionKeys: publicKey,
-				//signingKeys: privateKey
-			});
+			let encrypted;
+			try {
+				encrypted = await openpgp.encrypt({
+					message: await openpgp.createMessage( { text: message } ),
+					encryptionKeys: publicKey,
+				});
+			} catch (error) {
+				$( '#secure-form-test' ).append(
+					'<div class="alert alert-danger">' + data.errorOnKey + ' (' + error.message + ')</div>'
+				);
+				$( '#secure-form-test :input' ).prop( 'disabled', false );
+				$( '#secure-form-test .spinner' ).removeClass( 'is-active' );
+				setTimeout(function() {
+					$( '#secure-form-test .alert' ).remove();
+				}, 10000);
+				return;
+			}
 
 			let formData = {
 				action: 'send_secure_test_form',

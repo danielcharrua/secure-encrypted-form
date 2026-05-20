@@ -7,7 +7,6 @@
 	grid-template-columns: 1fr 260px;
 	grid-gap: 3em;
     margin: 0 auto;
-    max-width: 1260px;
 }
 
 .secure-form-wrapper .sidebar-panel {

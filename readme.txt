@@ -3,8 +3,9 @@ Contributors: danidub
 Donate link: https://charrua.es/donaciones/
 Tags: contact, form, contact form, openpgp, encrypted form, feedback, email, encryption, secure, secure form
 Requires at least: 5.3
-Tested up to: 6.4.3
-Stable tag: 1.0.1
+Tested up to: 7.0
+Requires PHP: 7.4
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,7 +104,7 @@ You can contribute and [translate this plugin to your own language](https://tran
 1. Upload the entire `secure-encrypted-form` folder to the `/wp-content/plugins/` directory.
 1. Activate the plugin through the **Plugins** screen (**Plugins > Installed Plugins**).
 
-You will find **Secure Encrypted Form** menu in your WordPress admin screen.
+You will find **Secure Encrypted Form** menu in your WordPress admin screen. Once configured, insert the form in any page or post using the shortcode `[secure-encrypted-form]`.
 
 == Frequently Asked Questions ==
 
@@ -124,6 +125,15 @@ Your server may be restricted or disabled to send emails. In that case you can u
 
 == Changelog ==
 
+= 1.1.0 =
+* Updated OpenPGP.js from v5.5.0 to v6.3.0.
+* Fixed silent encryption error when key is expired or invalid — now shows feedback to the user.
+* Improved form field order: name, email, subject, message.
+* Improved default form styling.
+* Renamed admin submenu item to "Settings".
+* Updated "Tested up to" to WordPress 7.0.
+* Added "Requires PHP: 7.4".
+
 = 1.0.1 =
 * Fixed donation links.
 * Added logs link on admin.
@@ -138,6 +148,9 @@ Your server may be restricted or disabled to send emails. In that case you can u
 * Initial launch.
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+* Updated OpenPGP.js to v6.3.0, fixed encryption error feedback, improved form UI and field order. Requires PHP 7.4+.
 
 = 1.0.1 =
 Fixed minor bugs, improved debug log, user feedback & UI/UX.

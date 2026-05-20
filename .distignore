@@ -3,8 +3,10 @@
 /.github
 /node_modules
 /.vscode
+/release
 
 .distignore
 .gitignore
+build.sh
 composer.json
 composer.lock

@@ -241,8 +241,17 @@ class Secure_Encrypted_Form_Admin {
 
 		add_submenu_page(
 			'secure-encrypted-form',
-			'Secure Encrypted Form log',
-			'Debug log',
+			'Secure Encrypted Form &mdash; ' . esc_html__( 'Settings', 'secure-encrypted-form' ),
+			esc_html__( 'Settings', 'secure-encrypted-form' ),
+			'manage_options',
+			'secure-encrypted-form',
+			array( $this, 'secure_encrypted_form_settings_page' ),
+		);
+
+		add_submenu_page(
+			'secure-encrypted-form',
+			'Secure Encrypted Form &mdash; ' . esc_html__( 'Debug log', 'secure-encrypted-form' ),
+			esc_html__( 'Debug log', 'secure-encrypted-form' ),
 			'manage_options',
 			'secure-encrypted-form-debug-log',
 			array( $this, 'secure_encrypted_form_debug_log_page' ),

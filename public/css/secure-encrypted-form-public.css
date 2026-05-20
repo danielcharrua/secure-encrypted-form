@@ -1,17 +1,49 @@
+.secure-form .form-group {
+    margin-bottom: 1.25em;
+}
+
 .secure-form label {
-    display: inline-block;
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 8px;
+    display: block;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 0.4em;
     padding: 0;
 }
 
-.secure-form input {
+.secure-form input[type="text"],
+.secure-form input[type="email"],
+.secure-form textarea {
     width: 100%;
+    box-sizing: border-box;
+    padding: 0.55em 0.75em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    font-family: inherit;
+    background: #fff;
+    color: inherit;
+    transition: border-color 0.15s;
+}
+
+.secure-form input[type="text"]:focus,
+.secure-form input[type="email"]:focus,
+.secure-form textarea:focus {
+    outline: none;
+    border-color: #666;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.08);
+}
+
+.secure-form textarea {
+    resize: vertical;
+    min-height: 130px;
 }
 
 .secure-form input[type="submit"] {
-    margin-top: 20px;
+    margin-top: 0.5em;
+    padding: 0.6em 1.5em;
+    font-size: 1em;
+    font-family: inherit;
+    cursor: pointer;
 }
 
 .secure-form .alert {
