@@ -18,6 +18,7 @@ composer install --no-dev --optimize-autoloader --quiet
 rsync -a \
   --exclude=".git" \
   --exclude=".github" \
+  --exclude=".claude" \
   --exclude=".gitignore" \
   --exclude=".distignore" \
   --exclude=".vscode" \

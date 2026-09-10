@@ -111,6 +111,11 @@ class Secure_Encrypted_Form {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-secure-encrypted-form-i18n.php';
 
 		/**
+		 * The class responsible for writing the plugin diagnostic log.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-secure-encrypted-form-logger.php';
+
+		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-secure-encrypted-form-admin.php';
@@ -157,6 +162,7 @@ class Secure_Encrypted_Form {
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_admin_settings_page' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'secure_encrypted_form_page_init' );
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'show_incomplete_settings_notice' );
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'maybe_migrate_logs' );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );

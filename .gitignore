@@ -2,3 +2,5 @@
 /lib/vendor
 /.wordpress-org/src
 /release
+TODO.md
+/.claude

@@ -10,3 +10,5 @@
 build.sh
 composer.json
 composer.lock
+TODO.md
+/.claude

@@ -9,10 +9,6 @@
  * @subpackage Secure_Encrypted_Form/admin
  */
 
-use Monolog\Logger;
-use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\RotatingFileHandler;
-
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -57,7 +53,7 @@ class Secure_Encrypted_Form_Admin {
 	 *
 	 * @since    1.0.0
 	 * @access   private
-	 * @var      Logger    $logger    The logger.
+	 * @var      Secure_Encrypted_Form_Logger    $logger    The logger.
 	 */
 	private $logger;
 
@@ -74,42 +70,18 @@ class Secure_Encrypted_Form_Admin {
 		$this->version     = $version;
 		$this->options     = get_option( 'secure_encrypted_form_option_name' );
 
-		$this->set_logger();
+		$this->logger = new Secure_Encrypted_Form_Logger();
 
 	}
 
 	/**
-	 * Initialize the Monolog logger.
+	 * Move the log directory used before 1.2.0 to its protected location.
 	 *
-	 * @since    1.0.0
+	 * @since    1.2.0
 	 */
-	private function set_logger() {
+	public function maybe_migrate_logs() {
 
-		$upload_dir     = wp_upload_dir();
-		$plugin_dirname = $upload_dir['basedir'] . '/' . $this->plugin_name;
-
-		// Check folder or create.
-		if ( ! file_exists( $plugin_dirname ) ) {
-			wp_mkdir_p( $plugin_dirname );
-		}
-
-		// The default date format is "Y-m-d\TH:i:sP".
-		$date_format = 'Y-m-d\TH:i:s';
-
-		// the default output format is "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n"
-		// we now change the default output format according to our needs.
-		$output = "[%datetime%] %level_name%: %message% %context%\n";
-
-		// finally, create a formatter.
-		$formatter = new LineFormatter( $output, $date_format );
-
-		// Create a handler.
-		$rotating_file = new RotatingFileHandler( $plugin_dirname . '/log.log', 7 );
-		$rotating_file->setFormatter( $formatter );
-
-		// bind it to a logger object.
-		$this->logger = new Logger( 'plugin-log' );
-		$this->logger->pushHandler( $rotating_file );
+		Secure_Encrypted_Form_Logger::maybe_migrate_legacy_directory();
 
 	}
 
@@ -155,7 +127,7 @@ class Secure_Encrypted_Form_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( 'openpgpjs', plugin_dir_url( dirname( __FILE__ ) ) . 'lib/js/openpgp.min.js', array(), '5.5.0', true );
+		wp_enqueue_script( 'openpgpjs', plugin_dir_url( dirname( __FILE__ ) ) . 'lib/js/openpgp.min.js', array(), '6.3.0', true );
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/secure-encrypted-form-admin.js', array( 'jquery', 'openpgpjs' ), $this->version, false );
 
 		wp_localize_script(
@@ -302,21 +274,8 @@ class Secure_Encrypted_Form_Admin {
 	 * @since    1.0.0
 	 */
 	public function get_debug_logs() {
-		$logs = array();
 
-		// Get a list of all the log files in the folder.
-		$upload_dir     = wp_upload_dir();
-		$plugin_dirname = $upload_dir['basedir'] . '/secure-encrypted-form';
-		$files          = scandir( $plugin_dirname );
-
-		// Read the contents of each log file.
-		foreach ( $files as $file ) {
-			if ( '.' !== $file && '..' !== $file ) {
-				array_push( $logs, $file );
-			}
-		}
-
-		return $logs;
+		return Secure_Encrypted_Form_Logger::get_log_files();
 	}
 
 	/**
@@ -327,10 +286,7 @@ class Secure_Encrypted_Form_Admin {
 	 */
 	public function read_debug_log( $filename ) {
 
-		$upload_dir     = wp_upload_dir();
-		$plugin_dirname = $upload_dir['basedir'] . '/secure-encrypted-form';
-
-		return file_get_contents( $plugin_dirname . '/' . $filename );
+		return Secure_Encrypted_Form_Logger::read_log_file( $filename );
 	}
 
 	/**
@@ -369,6 +325,15 @@ class Secure_Encrypted_Form_Admin {
 			'secure_encrypted_form_setting_section',
 			array( 'description' => __( 'Complete this field with your OpenPGP public key.', 'secure-encrypted-form' ) )
 		);
+
+		add_settings_field(
+			'logging',
+			esc_attr__( 'Diagnostic log', 'secure-encrypted-form' ),
+			array( $this, 'logging_callback' ),
+			'secure-encrypted-form',
+			'secure_encrypted_form_setting_section',
+			array( 'description' => __( 'Log files are stored in a protected folder inside your uploads directory and never contain the message, the email addresses or the subject. Keep this on "errors only" unless you are diagnosing a problem.', 'secure-encrypted-form' ) )
+		);
 	}
 
 	/**
@@ -387,6 +352,12 @@ class Secure_Encrypted_Form_Admin {
 
 		if ( isset( $input['public_key'] ) ) {
 			$sanitized_values['public_key'] = esc_textarea( $input['public_key'] );
+		}
+
+		$sanitized_values['logging'] = Secure_Encrypted_Form_Logger::MODE_ERRORS;
+
+		if ( isset( $input['logging'] ) && in_array( $input['logging'], Secure_Encrypted_Form_Logger::get_modes(), true ) ) {
+			$sanitized_values['logging'] = $input['logging'];
 		}
 
 		return $sanitized_values;
@@ -432,6 +403,39 @@ class Secure_Encrypted_Form_Admin {
 			isset( $this->options['public_key'] ) ? esc_attr( $this->options['public_key'] ) : '',
 			esc_html( $args['description'] ),
 		);
+
+	}
+
+	/**
+	 * Logging callback
+	 *
+	 * @since    1.2.0
+	 * @param Array $args The extra arguments to add.
+	 */
+	public function logging_callback( $args ) {
+
+		$choices = array(
+			Secure_Encrypted_Form_Logger::MODE_OFF    => __( 'Disabled', 'secure-encrypted-form' ),
+			Secure_Encrypted_Form_Logger::MODE_ERRORS => __( 'Errors only (recommended)', 'secure-encrypted-form' ),
+			Secure_Encrypted_Form_Logger::MODE_DEBUG  => __( 'Full log, including successful deliveries', 'secure-encrypted-form' ),
+		);
+
+		$selected = Secure_Encrypted_Form_Logger::get_mode();
+
+		echo '<select name="secure_encrypted_form_option_name[logging]" id="logging">';
+
+		foreach ( $choices as $value => $label ) {
+			printf(
+				'<option value="%1$s"%2$s>%3$s</option>',
+				esc_attr( $value ),
+				selected( $selected, $value, false ),
+				esc_html( $label )
+			);
+		}
+
+		echo '</select>';
+
+		printf( '<small>%s</small>', esc_html( $args['description'] ) );
 
 	}
 
@@ -505,11 +509,17 @@ class Secure_Encrypted_Form_Admin {
 
 		// Try to send mail.
 		// Also diagnose if PHP mail() function is disabled pn webhost.
+		// Anything else that goes wrong is reported as a regular sending error, so
+		// the administrator always gets an answer and the cause ends up in the log.
+		$sent = false;
+
 		try {
 			$sent = wp_mail( $to, $subject, $body, $headers, $attachments );
-		} catch ( Error $e ) {
+		} catch ( Throwable $e ) {
 			if ( str_contains( $e->getMessage(), 'Call to undefined function PHPMailer\PHPMailer\mail()' ) ) {
 				$sent = 'php_mail_fail';
+			} else {
+				$this->logger->error( 'wp_mail threw an exception: ', array( 'error' => $e->getMessage() ) );
 			}
 		}
 
@@ -519,7 +529,7 @@ class Secure_Encrypted_Form_Admin {
 			$data['success'] = true;
 			$data['message'] = esc_html__( 'Success: secure encrypted message [test] sent.', 'secure-encrypted-form' );
 
-			$this->logger->debug( 'Secure email [test] sent', array( 'to' => $to ) );
+			$this->logger->debug( 'Secure email [test] sent.' );
 
 		} elseif ( false === $sent ) {
 
@@ -537,7 +547,7 @@ class Secure_Encrypted_Form_Admin {
 			$data['errors']   = $errors;
 			$data['message']  = esc_html__( 'Error E6: secure encrypted message could not be sent, seems that you are sending emails with PHP mail() function and is disabled by your webhost.', 'secure-encrypted-form' );
 
-			$this->logger->error( 'Secure email [test] not sent: ', array( 'to' => $to ) );
+			$this->logger->error( 'Secure email [test] not sent.' );
 			$this->logger->error( 'Internal error code E6, PHP mail() function is disabled on webhost.' );
 		}
 
@@ -558,10 +568,9 @@ class Secure_Encrypted_Form_Admin {
 	 * @param   WP_Error $wp_error The error object.
 	 */
 	public function debug_wp_mail_failure( $wp_error ) {
-		$to = $wp_error->error_data['wp_mail_failed']['to'];
-		$this->logger->error( 'Secure email [test] not sent: ', $to );
+		$this->logger->error( 'Secure email [test] not sent.' );
 		$this->logger->error( 'Internal error code E3' );
-		$this->logger->error( 'wp_mail: ', $wp_error->errors );
+		$this->logger->error( 'wp_mail: ', array( 'error' => $wp_error->get_error_message() ) );
 	}
 
 	/**

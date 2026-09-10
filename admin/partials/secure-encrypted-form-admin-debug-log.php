@@ -23,18 +23,37 @@
 				<?php echo esc_html__( 'The debug log helps you to diagnose issues with the plugin. You can use the selector to see different logged days.', 'secure-encrypted-form' ); ?>
 			</p>
 
+			<?php if ( Secure_Encrypted_Form_Logger::MODE_OFF === Secure_Encrypted_Form_Logger::get_mode() ) : ?>
+				<div class="notice notice-warning inline">
+					<p>
+						<?php
+						printf(
+							/* Translators: %1$s and %2$s are HTML a tags, please do not translate this parameter. */
+							esc_html__( 'Logging is currently disabled, so no new entries are being recorded. You can enable it in the %1$splugin settings%2$s.', 'secure-encrypted-form' ),
+							'<a href="' . esc_url( admin_url( 'admin.php?page=secure-encrypted-form' ) ) . '">',
+							'</a>'
+						);
+						?>
+					</p>
+				</div>
+			<?php endif; ?>
+
+			<?php if ( empty( $logs ) ) : ?>
+				<p><?php echo esc_html__( 'There are no log files yet.', 'secure-encrypted-form' ); ?></p>
+			<?php else : ?>
 			<form method="post">
 				<label for="debug_log_files"><?php echo esc_html__( 'Select a log file:', 'secure-encrypted-form' ); ?></label><br>
-				<select name="debug_log_files">
+				<select name="debug_log_files" id="debug_log_files">
 				<?php
 				foreach ( $logs as $log ) {
-					echo '<option value="' . esc_attr( $log ) . '">' . esc_html( $log ) . '</option>';
+					echo '<option value="' . esc_attr( $log ) . '"' . selected( $selected_log, $log, false ) . '>' . esc_html( $log ) . '</option>';
 				}
 				?>
 				</select>
 				<?php wp_nonce_field( 'sef-debug-logs' ); ?>
 				<input class="button" type="submit" value="<?php echo esc_html__( 'View', 'secure-encrypted-form' ); ?>">
 			</form>
+			<?php endif; ?>
 
 			<?php
 

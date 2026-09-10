@@ -9,10 +9,6 @@
  * @subpackage Secure_Encrypted_Form/public
  */
 
-use Monolog\Logger;
-use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\RotatingFileHandler;
-
 /**
  * The public-facing functionality of the plugin.
  *
@@ -48,7 +44,7 @@ class Secure_Encrypted_Form_Public {
 	 *
 	 * @since    1.0.0
 	 * @access   private
-	 * @var      Logger    $logger    The logger.
+	 * @var      Secure_Encrypted_Form_Logger    $logger    The logger.
 	 */
 	private $logger;
 
@@ -64,42 +60,7 @@ class Secure_Encrypted_Form_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
 
-		$this->set_logger();
-
-	}
-
-	/**
-	 * Initialize the Monolog logger.
-	 *
-	 * @since    1.0.0
-	 */
-	private function set_logger() {
-
-		$upload_dir     = wp_upload_dir();
-		$plugin_dirname = $upload_dir['basedir'] . '/' . $this->plugin_name;
-
-		// Check folder or create.
-		if ( ! file_exists( $plugin_dirname ) ) {
-			wp_mkdir_p( $plugin_dirname );
-		}
-
-		// The default date format is "Y-m-d\TH:i:sP".
-		$date_format = 'Y-m-d\TH:i:s';
-
-		// the default output format is "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n"
-		// we now change the default output format according to our needs.
-		$output = "[%datetime%] %level_name%: %message% %context%\n";
-
-		// finally, create a formatter.
-		$formatter = new LineFormatter( $output, $date_format );
-
-		// Create a handler.
-		$rotating_file = new RotatingFileHandler( $plugin_dirname . '/log.log', 7 );
-		$rotating_file->setFormatter( $formatter );
-
-		// bind it to a logger object.
-		$this->logger = new Logger( 'plugin-log' );
-		$this->logger->pushHandler( $rotating_file );
+		$this->logger = new Secure_Encrypted_Form_Logger();
 
 	}
 
@@ -145,7 +106,7 @@ class Secure_Encrypted_Form_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( 'openpgpjs', plugin_dir_url( dirname( __FILE__ ) ) . 'lib/js/openpgp.min.js', array(), '5.5.0', true );
+		wp_enqueue_script( 'openpgpjs', plugin_dir_url( dirname( __FILE__ ) ) . 'lib/js/openpgp.min.js', array(), '6.3.0', true );
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/secure-encrypted-form-public.js', array( 'jquery', 'openpgpjs' ), $this->version, false );
 
 		/**
@@ -290,11 +251,17 @@ class Secure_Encrypted_Form_Public {
 
 			// Try to send mail.
 			// Also diagnose if PHP mail() function is disabled pn webhost.
+			// Anything else that goes wrong is reported as a regular sending error, so
+			// the visitor always gets an answer and the cause ends up in the log.
+			$sent = false;
+
 			try {
 				$sent = wp_mail( $to, $subject, $body, $headers, $attachments );
-			} catch ( Error $e ) {
+			} catch ( Throwable $e ) {
 				if ( str_contains( $e->getMessage(), 'Call to undefined function PHPMailer\PHPMailer\mail()' ) ) {
 					$sent = 'php_mail_fail';
+				} else {
+					$this->logger->error( 'wp_mail threw an exception: ', array( 'error' => $e->getMessage() ) );
 				}
 			}
 
@@ -304,14 +271,7 @@ class Secure_Encrypted_Form_Public {
 				$data['success'] = true;
 				$data['message'] = esc_html__( 'Success: secure encrypted message sent.', 'secure-encrypted-form' );
 
-				$this->logger->debug(
-					'Secure email sent: ',
-					array(
-						'from'    => $email_field,
-						'to'      => $to,
-						'subject' => $subject,
-					)
-				);
+				$this->logger->debug( 'Secure email sent.' );
 
 			} elseif ( false === $sent ) {
 
@@ -329,7 +289,7 @@ class Secure_Encrypted_Form_Public {
 				$data['errors']   = $errors;
 				$data['message']  = esc_html__( 'Error: secure encrypted message could not be sent, please contact website owner.', 'secure-encrypted-form' );
 
-				$this->logger->error( 'Secure email not sent: ', array( 'to' => $to ) );
+				$this->logger->error( 'Secure email not sent.' );
 				$this->logger->error( 'PHP mail() function is disabled on webhost.' );
 			}
 
@@ -352,10 +312,9 @@ class Secure_Encrypted_Form_Public {
 	 * @param   WP_Error $wp_error The error object.
 	 */
 	public function debug_wp_mail_failure( $wp_error ) {
-		$to = $wp_error->error_data['wp_mail_failed']['to'];
-		$this->logger->error( 'Secure email not sent: ', $to );
+		$this->logger->error( 'Secure email not sent.' );
 		$this->logger->error( 'Internal error code E2' );
-		$this->logger->error( 'wp_mail: ', $wp_error->errors );
+		$this->logger->error( 'wp_mail: ', array( 'error' => $wp_error->get_error_message() ) );
 	}
 
 }

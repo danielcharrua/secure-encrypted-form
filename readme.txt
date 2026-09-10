@@ -3,9 +3,9 @@ Contributors: danidub
 Donate link: https://charrua.es/donaciones/
 Tags: contact, form, contact form, openpgp, encrypted form, feedback, email, encryption, secure, secure form
 Requires at least: 5.3
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -125,6 +125,18 @@ Your server may be restricted or disabled to send emails. In that case you can u
 
 == Changelog ==
 
+= 1.2.0 =
+* Security: log files are no longer written to a predictable, publicly reachable path inside the uploads folder. The log directory now carries a random suffix and ships with server rules that block direct web access. Existing logs are moved to the protected location automatically. Reported by a plugin user, thank you.
+* Security: the diagnostic log no longer records the sender email address or the message subject.
+* Security: hardened the log viewer so it can only open the plugin's own log files.
+* Added a "Diagnostic log" setting with three levels: disabled, errors only (the default) and full log. The log folder is only created when there is something to write.
+* Logging is now handled by a single shared class instead of duplicated code in the admin and public sides.
+* Fixed an unexpected mail error leaving the form without an answer: the visitor got no feedback and nothing was written to the log. Any failure is now reported and logged.
+* Uninstalling the plugin now deletes its log files.
+* Updated Monolog from 2.8.0 to 2.11.1, which removes the deprecation notices shown on PHP 8.4 and newer.
+* Updated "Tested up to" to WordPress 7.1.
+* Fixed the version number declared when enqueuing OpenPGP.js (it still said 5.5.0 while the bundled library is 6.3.0), so browsers pick up the right cached file.
+
 = 1.1.0 =
 * Updated OpenPGP.js from v5.5.0 to v6.3.0.
 * Fixed silent encryption error when key is expired or invalid — now shows feedback to the user.
@@ -148,6 +160,9 @@ Your server may be restricted or disabled to send emails. In that case you can u
 * Initial launch.
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+* Security release: plugin logs are no longer web accessible and no longer store sender addresses or subjects. Please update. Also adds WordPress 7.1 compatibility.
 
 = 1.1.0 =
 * Updated OpenPGP.js to v6.3.0, fixed encryption error feedback, improved form UI and field order. Requires PHP 7.4+.
