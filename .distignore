@@ -1,3 +1,4 @@
+.DS_Store
 /.wordpress-org
 /.git
 /.github
@@ -11,6 +12,8 @@ build.sh
 composer.json
 composer.lock
 TODO.md
+README.md
+CLAUDE.md
 /.claude
 /tests
 /node_modules

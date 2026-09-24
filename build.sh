@@ -16,6 +16,7 @@ composer install --no-dev --optimize-autoloader --quiet
 
 # Copy plugin files, excluding dev-only files
 rsync -a \
+  --exclude=".DS_Store" \
   --exclude=".git" \
   --exclude=".github" \
   --exclude=".claude" \
@@ -28,6 +29,9 @@ rsync -a \
   --exclude="composer.lock" \
   --exclude="node_modules" \
   --exclude="tests" \
+  --exclude="README.md" \
+  --exclude="CLAUDE.md" \
+  --exclude="TODO.md" \
   --exclude="package.json" \
   --exclude="package-lock.json" \
   --exclude="phpcs.xml.dist" \
