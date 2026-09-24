@@ -1,7 +1,7 @@
 === Secure Encrypted Form ===
 Contributors: danidub
 Donate link: https://charrua.es/donaciones/
-Tags: contact, form, contact form, openpgp, encrypted form, feedback, email, encryption, secure, secure form
+Tags: contact form, encryption, openpgp, secure form, privacy
 Requires at least: 5.3
 Tested up to: 7.1
 Requires PHP: 7.4

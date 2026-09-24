@@ -11,6 +11,11 @@
  * @subpackage Secure_Encrypted_Form/admin/partials
  */
 
+// Partials are only ever included from the plugin, never requested directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 ?>
 
 <div class="sidebar-panel">

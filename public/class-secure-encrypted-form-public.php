@@ -288,7 +288,7 @@ class Secure_Encrypted_Form_Public {
 			try {
 				$sent = wp_mail( $to, $subject, $body, $headers, $attachments );
 			} catch ( Throwable $e ) {
-				if ( str_contains( $e->getMessage(), 'Call to undefined function PHPMailer\PHPMailer\mail()' ) ) {
+				if ( false !== strpos( $e->getMessage(), 'Call to undefined function PHPMailer\PHPMailer\mail()' ) ) {
 					$sent = 'php_mail_fail';
 				} else {
 					$this->logger->error( 'wp_mail threw an exception: ', array( 'error' => $e->getMessage() ) );

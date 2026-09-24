@@ -11,6 +11,11 @@
  * @subpackage Secure_Encrypted_Form/admin/partials
  */
 
+// Partials are only ever included from the plugin, never requested directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 ?>
 
 <div class="wrap secure-form-wrapper">
@@ -51,8 +56,8 @@
 				<label for="debug_log_files"><?php echo esc_html__( 'Select a log file:', 'secure-encrypted-form' ); ?></label><br>
 				<select name="debug_log_files" id="debug_log_files">
 				<?php
-				foreach ( $logs as $log ) {
-					echo '<option value="' . esc_attr( $log ) . '"' . selected( $selected_log, $log, false ) . '>' . esc_html( $log ) . '</option>';
+				foreach ( $logs as $sef_log ) {
+					echo '<option value="' . esc_attr( $sef_log ) . '"' . selected( $selected_log, $sef_log, false ) . '>' . esc_html( $sef_log ) . '</option>';
 				}
 				?>
 				</select>

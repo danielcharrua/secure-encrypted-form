@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-24T15:48:23+00:00\n"
+"POT-Creation-Date: 2026-09-24T15:57:42+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: secure-encrypted-form\n"
@@ -152,176 +152,176 @@ msgstr ""
 msgid "Optional. %1$sCloudflare Turnstile%2$s asks visitors to pass a check before the form is sent, without the puzzles of a traditional captcha. Leave it off if you do not need it."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:557
+#: admin/class-secure-encrypted-form-admin.php:558
 msgid "The message is always encrypted in the browser before anything is sent, with or without Turnstile. Your visitors' IP addresses are never sent to Cloudflare. If Cloudflare cannot be reached, messages are let through and the problem is written to the diagnostic log, so a Cloudflare outage never costs you a legitimate message."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:572
+#: admin/class-secure-encrypted-form-admin.php:573
 msgid "Enable Cloudflare Turnstile on the public form"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:624
+#: admin/class-secure-encrypted-form-admin.php:625
 msgid "Error: you are not allowed to send test emails."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:647
+#: admin/class-secure-encrypted-form-admin.php:648
 msgid "Secure message [test]"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:650
+#: admin/class-secure-encrypted-form-admin.php:651
 #: public/class-secure-encrypted-form-public.php:243
 msgid "From:"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:652
+#: admin/class-secure-encrypted-form-admin.php:653
 #: public/class-secure-encrypted-form-public.php:245
 msgid "Please find the message attached."
 msgstr ""
 
 #. translators: %1$s is the plugin name and %2$s is the plugin version
-#: admin/class-secure-encrypted-form-admin.php:656
+#: admin/class-secure-encrypted-form-admin.php:657
 #: public/class-secure-encrypted-form-public.php:249
 #, php-format
 msgid "Sent with %1$s for WordPress v%2$s"
 msgstr ""
 
 #. translators: %1$s and %2$s are HTML a tags
-#: admin/class-secure-encrypted-form-admin.php:665
+#: admin/class-secure-encrypted-form-admin.php:666
 #: public/class-secure-encrypted-form-public.php:258
 #, php-format
 msgid "%1$sIf you find this piece of software usefull please consider %2$sdonating to the author%3$s."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:709
+#: admin/class-secure-encrypted-form-admin.php:710
 msgid "Success: secure encrypted message [test] sent."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:719
+#: admin/class-secure-encrypted-form-admin.php:720
 msgid "Error E3: secure encrypted message could not be sent, see debug log please."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:727
+#: admin/class-secure-encrypted-form-admin.php:728
 msgid "Error E6: secure encrypted message could not be sent, seems that you are sending emails with PHP mail() function and is disabled by your webhost."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:764
+#: admin/class-secure-encrypted-form-admin.php:765
 msgid "It seems that PHP mail() function is disabled on your server. Please contact your hosting provider or use a SMTP plugin."
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-debug-log.php:23
+#: admin/partials/secure-encrypted-form-admin-debug-log.php:28
 msgid "The debug log helps you to diagnose issues with the plugin. You can use the selector to see different logged days."
 msgstr ""
 
 #. Translators: %1$s and %2$s are HTML a tags, please do not translate this parameter.
-#: admin/partials/secure-encrypted-form-admin-debug-log.php:32
+#: admin/partials/secure-encrypted-form-admin-debug-log.php:37
 #, php-format
 msgid "Logging is currently disabled, so no new entries are being recorded. You can enable it in the %1$splugin settings%2$s."
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-debug-log.php:43
+#: admin/partials/secure-encrypted-form-admin-debug-log.php:48
 msgid "The log files have been deleted."
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-debug-log.php:48
+#: admin/partials/secure-encrypted-form-admin-debug-log.php:53
 msgid "There are no log files yet."
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-debug-log.php:51
+#: admin/partials/secure-encrypted-form-admin-debug-log.php:56
 msgid "Select a log file:"
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-debug-log.php:60
+#: admin/partials/secure-encrypted-form-admin-debug-log.php:65
 msgid "View"
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-debug-log.php:63
+#: admin/partials/secure-encrypted-form-admin-debug-log.php:68
 msgid "Delete log files"
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-debug-log.php:65
+#: admin/partials/secure-encrypted-form-admin-debug-log.php:70
 msgid "Logs written by versions before 1.2.0 recorded the email addresses and the subject of each message. Deleting them removes every log file the plugin has stored. This cannot be undone."
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-debug-log.php:67
+#: admin/partials/secure-encrypted-form-admin-debug-log.php:72
 msgid "Delete all plugin log files? This cannot be undone."
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-debug-log.php:70
+#: admin/partials/secure-encrypted-form-admin-debug-log.php:75
 msgid "Delete all log files"
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-debug-log.php:81
+#: admin/partials/secure-encrypted-form-admin-debug-log.php:86
 msgid "Viewing:"
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-settings.php:22
+#: admin/partials/secure-encrypted-form-admin-settings.php:27
 msgid "The Secure Encrypted Form helps you to include a secure form in your website trought a shortcode. The message that is sent to you is encrypted with your public PGP key. This ensures that only you with the private key can decrypt the message."
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-settings.php:27
+#: admin/partials/secure-encrypted-form-admin-settings.php:32
 msgid "Usage"
 msgstr ""
 
 #. Translators: %1$s and %2$s are HTML code tags.
-#: admin/partials/secure-encrypted-form-admin-settings.php:33
+#: admin/partials/secure-encrypted-form-admin-settings.php:38
 #, php-format
 msgid "Insert shortcode in any page using %1$s[secure-encrypted-form]%2$s."
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-settings.php:52
+#: admin/partials/secure-encrypted-form-admin-settings.php:57
 msgid "Having problems?"
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-settings.php:55
+#: admin/partials/secure-encrypted-form-admin-settings.php:60
 msgid "If you are not sure if your website is sending emails correctly, you can use this button to test and send an email. Have in mind that your server is in charge of sending emails. You may need to install a plugin for authenticating email using SMTP. Remember to always save settings before sending test emails."
 msgstr ""
 
 #. Translators: %1$s and %2$s are HTML a tags, please do not translate this parameter.
-#: admin/partials/secure-encrypted-form-admin-settings.php:61
+#: admin/partials/secure-encrypted-form-admin-settings.php:66
 #, php-format
 msgid "You can also check the plugin logs for further information. %1$sCheck logs%2$s."
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-settings.php:74
+#: admin/partials/secure-encrypted-form-admin-settings.php:79
 msgid "Send test email"
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-sidebar.php:18
+#: admin/partials/secure-encrypted-form-admin-sidebar.php:23
 msgid "Donations"
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-sidebar.php:22
+#: admin/partials/secure-encrypted-form-admin-sidebar.php:27
 msgid "If you find this plugin useful please consider donating to the author and keep working on the plugin. You can use the ⚡️ Lightning Network to send some sats."
 msgstr ""
 
 #. Translators: %1$s and %2$s are HTML a tags, please do not translate this parameter.
-#: admin/partials/secure-encrypted-form-admin-sidebar.php:32
+#: admin/partials/secure-encrypted-form-admin-sidebar.php:37
 #, php-format
 msgid "%1$sDonate here%2$s."
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-sidebar.php:44
+#: admin/partials/secure-encrypted-form-admin-sidebar.php:49
 msgid "Rate this plugin"
 msgstr ""
 
 #. Translators: %1$s and %2$s are HTML bold tags.
-#: admin/partials/secure-encrypted-form-admin-sidebar.php:49
+#: admin/partials/secure-encrypted-form-admin-sidebar.php:54
 #, php-format
 msgid "Help us spread the word %1$sby giving Secure Encrypted Form a 5-star rating (⭐️⭐️⭐️⭐️⭐️) on WordPress.org%2$s. Thanks for your support and we look forward to bringing you more awesome features."
 msgstr ""
 
 #. Translators: %1$s and %2$s are HTML a tags, please do not translate this parameter.
-#: admin/partials/secure-encrypted-form-admin-sidebar.php:61
+#: admin/partials/secure-encrypted-form-admin-sidebar.php:66
 #, php-format
 msgid "%1$sRate plugin%2$s."
 msgstr ""
 
-#: admin/partials/secure-encrypted-form-admin-sidebar.php:73
+#: admin/partials/secure-encrypted-form-admin-sidebar.php:78
 msgid "Need WordPress custom work?"
 msgstr ""
 
 #. Translators: %1$s and %2$s are HTML bold tags; %3$s is charrua.es website link.
-#: admin/partials/secure-encrypted-form-admin-sidebar.php:78
+#: admin/partials/secure-encrypted-form-admin-sidebar.php:83
 #, php-format
 msgid "This plugin is created and supported by %1$sCharrúa ⚡️ - Building Smarter Websites%2$s. If you need some custom WordPress work please contact us at %3$s."
 msgstr ""

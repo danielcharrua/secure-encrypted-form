@@ -195,7 +195,7 @@ class Secure_Encrypted_Form_Admin {
 	 */
 	public static function is_secure_context() {
 
-		if ( is_ssl() || str_starts_with( (string) get_option( 'home' ), 'https://' ) ) {
+		if ( is_ssl() || 0 === strpos( (string) get_option( 'home' ), 'https://' ) ) {
 			return true;
 		}
 
@@ -551,6 +551,7 @@ class Secure_Encrypted_Form_Admin {
 			sprintf(
 				/* translators: %1$s and %2$s are HTML a tags, please do not translate this parameter. */
 				esc_html__( 'Optional. %1$sCloudflare Turnstile%2$s asks visitors to pass a check before the form is sent, without the puzzles of a traditional captcha. Leave it off if you do not need it.', 'secure-encrypted-form' ),
+				// phpcs:ignore PluginCheck.CodeAnalysis.Offloading.OffloadedContent -- A documentation link, not offloaded content.
 				'<a href="' . esc_url( 'https://www.cloudflare.com/products/turnstile/' ) . '" target="_blank" rel="noopener noreferrer">',
 				'</a>'
 			),
@@ -695,7 +696,7 @@ class Secure_Encrypted_Form_Admin {
 		try {
 			$sent = wp_mail( $to, $subject, $body, $headers, $attachments );
 		} catch ( Throwable $e ) {
-			if ( str_contains( $e->getMessage(), 'Call to undefined function PHPMailer\PHPMailer\mail()' ) ) {
+			if ( false !== strpos( $e->getMessage(), 'Call to undefined function PHPMailer\PHPMailer\mail()' ) ) {
 				$sent = 'php_mail_fail';
 			} else {
 				$this->logger->error( 'wp_mail threw an exception: ', array( 'error' => $e->getMessage() ) );

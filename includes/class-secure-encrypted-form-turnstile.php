@@ -40,6 +40,7 @@ class Secure_Encrypted_Form_Turnstile {
 	 * @since    1.3.0
 	 * @var      string
 	 */
+	// phpcs:ignore PluginCheck.CodeAnalysis.Offloading.OffloadedContent -- Turnstile is a third party anti spam service; its endpoint cannot be self hosted and is disclosed in readme.txt.
 	const VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
 	/**
@@ -48,6 +49,7 @@ class Secure_Encrypted_Form_Turnstile {
 	 * @since    1.3.0
 	 * @var      string
 	 */
+	// phpcs:ignore PluginCheck.CodeAnalysis.Offloading.OffloadedContent -- Cloudflare requires the widget script to be loaded from their domain; bundling it is not possible.
 	const SCRIPT_URL = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
 
 	/**
@@ -229,7 +231,7 @@ class Secure_Encrypted_Form_Turnstile {
 
 		// A bad secret key is the site owner's problem, not the visitor's, so it
 		// is treated like an outage instead of blocking every message.
-		if ( str_contains( $codes, 'invalid-input-secret' ) || str_contains( $codes, 'missing-input-secret' ) ) {
+		if ( false !== strpos( $codes, 'invalid-input-secret' ) || false !== strpos( $codes, 'missing-input-secret' ) ) {
 			$this->logger->error(
 				'Turnstile rejected the secret key, check the plugin settings. Letting the submission through: ',
 				array( 'codes' => $codes )

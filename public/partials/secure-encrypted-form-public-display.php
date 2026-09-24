@@ -11,6 +11,11 @@
  * @subpackage Secure_Encrypted_Form/public/partials
  */
 
+// Partials are only ever included from the plugin, never requested directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 ?>
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
