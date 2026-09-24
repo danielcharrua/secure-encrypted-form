@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Fired during plugin activation
  *
@@ -30,7 +29,6 @@ class Secure_Encrypted_Form_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-
 	}
 
 	/**
@@ -54,7 +52,5 @@ class Secure_Encrypted_Form_Activator {
 		if ( ! get_option( 'secure_encrypted_form_option_name' ) ) {
 			add_option( 'secure_encrypted_form_option_name', $plugin_options );
 		}
-
 	}
-
 }

@@ -27,6 +27,10 @@ rsync -a \
   --exclude="composer.json" \
   --exclude="composer.lock" \
   --exclude="node_modules" \
+  --exclude="tests" \
+  --exclude="package.json" \
+  --exclude="package-lock.json" \
+  --exclude="phpcs.xml.dist" \
   --exclude="release" \
   . "$PLUGIN_DIR/"
 

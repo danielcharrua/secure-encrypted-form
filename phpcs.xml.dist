@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<ruleset name="Secure Encrypted Form">
+
+	<description>Coding standards for the Secure Encrypted Form plugin.</description>
+
+	<!-- What to scan. -->
+	<file>.</file>
+	<exclude-pattern>/lib/vendor/*</exclude-pattern>
+	<exclude-pattern>/lib/js/*</exclude-pattern>
+	<exclude-pattern>/release/*</exclude-pattern>
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+	<exclude-pattern>/tests/*</exclude-pattern>
+
+	<!-- Show the sniff name on every message and use colors. -->
+	<arg value="ps"/>
+	<arg name="colors"/>
+	<arg name="extensions" value="php"/>
+	<arg name="parallel" value="8"/>
+
+	<rule ref="WordPress"/>
+
+	<!-- Minimum supported versions, taken from the plugin headers. -->
+	<config name="minimum_wp_version" value="5.3"/>
+	<config name="testVersion" value="7.4-"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="secure-encrypted-form"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="secure_encrypted_form"/>
+				<element value="Secure_Encrypted_Form"/>
+				<element value="SECURE_ENCRYPTED_FORM"/>
+			</property>
+		</properties>
+		<!-- Partials are included from inside a method, so their variables are not global. -->
+		<exclude-pattern>*/partials/*</exclude-pattern>
+	</rule>
+
+	<!-- Shortcode callbacks must keep the $atts parameter even when unused. -->
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter.Found">
+		<exclude-pattern>*/class-secure-encrypted-form-public.php</exclude-pattern>
+	</rule>
+
+	<!-- Secure_Encrypted_Form_i18n follows the WordPress Plugin Boilerplate naming. -->
+	<rule ref="PEAR.NamingConventions.ValidClassName.Invalid">
+		<exclude-pattern>*/class-secure-encrypted-form-i18n.php</exclude-pattern>
+	</rule>
+
+</ruleset>

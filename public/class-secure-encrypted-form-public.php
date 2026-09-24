@@ -61,7 +61,6 @@ class Secure_Encrypted_Form_Public {
 		$this->version     = $version;
 
 		$this->logger = new Secure_Encrypted_Form_Logger();
-
 	}
 
 	/**
@@ -84,7 +83,6 @@ class Secure_Encrypted_Form_Public {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/secure-encrypted-form-public.css', array(), $this->version, 'all' );
-
 	}
 
 	/**
@@ -106,7 +104,7 @@ class Secure_Encrypted_Form_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( 'openpgpjs', plugin_dir_url( dirname( __FILE__ ) ) . 'lib/js/openpgp.min.js', array(), '6.3.0', true );
+		wp_enqueue_script( 'openpgpjs', plugin_dir_url( __DIR__ ) . 'lib/js/openpgp.min.js', array(), '6.3.0', true );
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/secure-encrypted-form-public.js', array( 'jquery', 'openpgpjs' ), $this->version, false );
 
 		/**
@@ -239,6 +237,7 @@ class Secure_Encrypted_Form_Public {
 			$temp_file = wp_tempnam( 'secure-message' );
 			$fileinfo  = pathinfo( $temp_file );
 			$filename  = $fileinfo['dirname'] . '/' . $fileinfo['filename'] . '.txt.gpg';
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Writing a local temp file for the mail attachment.
 			file_put_contents( $filename, $message_field );
 
 			$attachments = array( $filename );
@@ -294,7 +293,7 @@ class Secure_Encrypted_Form_Public {
 			}
 
 			// Delete temp file (attachment).
-			unlink( $filename );
+			wp_delete_file( $filename );
 		}
 
 		// Disable wp_mail capture errors.
@@ -302,7 +301,6 @@ class Secure_Encrypted_Form_Public {
 
 		echo wp_json_encode( $data );
 		wp_die();
-
 	}
 
 	/**
@@ -316,5 +314,4 @@ class Secure_Encrypted_Form_Public {
 		$this->logger->error( 'Internal error code E2' );
 		$this->logger->error( 'wp_mail: ', array( 'error' => $wp_error->get_error_message() ) );
 	}
-
 }

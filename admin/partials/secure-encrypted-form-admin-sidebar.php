@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Provide an admin sidebar area view for the plugin
  *
@@ -28,7 +27,7 @@
 	</p>
 	<p>
 		<?php
-		echo sprintf(
+		printf(
 			/* Translators: %1$s and %2$s are HTML a tags, please do not translate this parameter. */
 			esc_html__(
 				'%1$sDonate here%2$s.',
@@ -45,7 +44,7 @@
 		<?php echo esc_html__( 'Rate this plugin', 'secure-encrypted-form' ); ?>
 	</h2>
 	<?php
-	echo sprintf(
+	printf(
 		/* Translators: %1$s and %2$s are HTML bold tags. */
 		esc_html__(
 			'Help us spread the word %1$sby giving Secure Encrypted Form a 5-star rating (⭐️⭐️⭐️⭐️⭐️) on WordPress.org%2$s. Thanks for your support and we look forward to bringing you more awesome features.',
@@ -57,7 +56,7 @@
 	?>
 	<p>
 		<?php
-		echo sprintf(
+		printf(
 			/* Translators: %1$s and %2$s are HTML a tags, please do not translate this parameter. */
 			esc_html__(
 				'%1$sRate plugin%2$s.',
@@ -74,7 +73,7 @@
 		<?php echo esc_html__( 'Need WordPress custom work?', 'secure-encrypted-form' ); ?>
 	</h2>
 	<?php
-	echo sprintf(
+	printf(
 		/* Translators: %1$s and %2$s are HTML bold tags; %3$s is charrua.es website link. */
 		esc_html__(
 			'This plugin is created and supported by %1$sCharrúa ⚡️ - Building Smarter Websites%2$s. If you need some custom WordPress work please contact us at %3$s.',

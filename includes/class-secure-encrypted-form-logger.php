@@ -110,7 +110,6 @@ class Secure_Encrypted_Form_Logger {
 	public function __construct() {
 
 		$this->mode = self::get_mode();
-
 	}
 
 	/**
@@ -206,7 +205,7 @@ class Secure_Encrypted_Form_Logger {
 			return;
 		}
 
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors -- A failed rename is handled below.
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors, WordPress.WP.AlternativeFunctions.rename_rename -- A failed rename is handled below and WP_Filesystem is not guaranteed here.
 		if ( ! is_dir( $target ) && @rename( $legacy, $target ) ) {
 			self::protect_directory( $target );
 			return;
@@ -288,7 +287,7 @@ class Secure_Encrypted_Form_Logger {
 			return '';
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_get_contents
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading a local log file, not a remote request.
 		$contents = file_get_contents( self::get_log_path() . '/' . $filename );
 
 		return false === $contents ? '' : $contents;
@@ -319,7 +318,7 @@ class Secure_Encrypted_Form_Logger {
 			}
 		}
 
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors -- Nothing to do if the directory cannot be removed.
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors, WordPress.WP.AlternativeFunctions.file_system_operations_rmdir -- Nothing to do if the directory cannot be removed.
 		@rmdir( $path );
 	}
 
@@ -422,5 +421,4 @@ class Secure_Encrypted_Form_Logger {
 
 		return $this->logger;
 	}
-
 }

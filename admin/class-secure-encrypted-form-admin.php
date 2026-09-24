@@ -71,7 +71,6 @@ class Secure_Encrypted_Form_Admin {
 		$this->options     = get_option( 'secure_encrypted_form_option_name' );
 
 		$this->logger = new Secure_Encrypted_Form_Logger();
-
 	}
 
 	/**
@@ -82,7 +81,6 @@ class Secure_Encrypted_Form_Admin {
 	public function maybe_migrate_logs() {
 
 		Secure_Encrypted_Form_Logger::maybe_migrate_legacy_directory();
-
 	}
 
 	/**
@@ -105,7 +103,6 @@ class Secure_Encrypted_Form_Admin {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/secure-encrypted-form-admin.css', array(), $this->version, 'all' );
-
 	}
 
 	/**
@@ -127,7 +124,7 @@ class Secure_Encrypted_Form_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( 'openpgpjs', plugin_dir_url( dirname( __FILE__ ) ) . 'lib/js/openpgp.min.js', array(), '6.3.0', true );
+		wp_enqueue_script( 'openpgpjs', plugin_dir_url( __DIR__ ) . 'lib/js/openpgp.min.js', array(), '6.3.0', true );
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/secure-encrypted-form-admin.js', array( 'jquery', 'openpgpjs' ), $this->version, false );
 
 		wp_localize_script(
@@ -160,7 +157,6 @@ class Secure_Encrypted_Form_Admin {
 
 				printf( '<div class="%1$s"><p>%2$s <a href="%3$s">%4$s</a></p></div>', esc_attr( $class ), esc_html( $message ), esc_url( $url ), esc_html( $link_text ) );
 		}
-
 	}
 
 	/**
@@ -238,7 +234,6 @@ class Secure_Encrypted_Form_Admin {
 	public function secure_encrypted_form_settings_page() {
 
 		require_once plugin_dir_path( __FILE__ ) . 'partials/' . $this->plugin_name . '-admin-settings.php';
-
 	}
 
 	/**
@@ -265,7 +260,6 @@ class Secure_Encrypted_Form_Admin {
 		}
 
 		require_once plugin_dir_path( __FILE__ ) . 'partials/' . $this->plugin_name . '-admin-debug-log.php';
-
 	}
 
 	/**
@@ -371,7 +365,6 @@ class Secure_Encrypted_Form_Admin {
 	public function secure_encrypted_form_section_info() {
 
 		print esc_html__( 'Enter your settings below', 'secure-encrypted-form' );
-
 	}
 
 	/**
@@ -387,7 +380,6 @@ class Secure_Encrypted_Form_Admin {
 			isset( $this->options['email'] ) ? esc_attr( $this->options['email'] ) : '',
 			esc_html( $args['description'] ),
 		);
-
 	}
 
 	/**
@@ -403,7 +395,6 @@ class Secure_Encrypted_Form_Admin {
 			isset( $this->options['public_key'] ) ? esc_attr( $this->options['public_key'] ) : '',
 			esc_html( $args['description'] ),
 		);
-
 	}
 
 	/**
@@ -436,7 +427,6 @@ class Secure_Encrypted_Form_Admin {
 		echo '</select>';
 
 		printf( '<small>%s</small>', esc_html( $args['description'] ) );
-
 	}
 
 	/**
@@ -497,6 +487,7 @@ class Secure_Encrypted_Form_Admin {
 		$temp_file = wp_tempnam( 'secure-message' );
 		$fileinfo  = pathinfo( $temp_file );
 		$filename  = $fileinfo['dirname'] . '/' . $fileinfo['filename'] . '.txt.gpg';
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Writing a local temp file for the mail attachment.
 		file_put_contents( $filename, $message_field );
 
 		$attachments = array( $filename );
@@ -552,7 +543,7 @@ class Secure_Encrypted_Form_Admin {
 		}
 
 		// Delete temp file (attachment).
-		unlink( $filename );
+		wp_delete_file( $filename );
 
 		// Disable wp_mail capture errors.
 		remove_action( 'wp_mail_failed', array( $this, 'debug_wp_mail_failure' ) );
@@ -586,7 +577,5 @@ class Secure_Encrypted_Form_Admin {
 
 			printf( '<div class="%1$s"><span class="dashicons dashicons-warning"></span> %2$s</div>', esc_attr( $class ), esc_html( $message ) );
 		}
-
 	}
-
 }

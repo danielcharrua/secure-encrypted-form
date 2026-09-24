@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Provide a public-facing view for the plugin
  *
@@ -11,6 +10,7 @@
  * @package    Secure_Encrypted_Form
  * @subpackage Secure_Encrypted_Form/public/partials
  */
+
 ?>
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->

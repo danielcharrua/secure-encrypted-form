@@ -28,7 +28,7 @@
 			</h2>
 			<p>
 				<?php
-				echo sprintf(
+				printf(
 					/* Translators: %1$s and %2$s are HTML code tags. */
 					esc_html__(
 						'Insert shortcode in any page using %1$s[secure-encrypted-form]%2$s.',
@@ -56,7 +56,7 @@
 			</p>
 			<p>
 				<?php
-				echo sprintf(
+				printf(
 					/* Translators: %1$s and %2$s are HTML a tags, please do not translate this parameter. */
 					esc_html__(
 						'You can also check the plugin logs for further information. %1$sCheck logs%2$s.',

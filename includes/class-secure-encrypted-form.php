@@ -77,7 +77,6 @@ class Secure_Encrypted_Form {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
 	}
 
 	/**
@@ -102,32 +101,31 @@ class Secure_Encrypted_Form {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-secure-encrypted-form-loader.php';
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-secure-encrypted-form-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-secure-encrypted-form-i18n.php';
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-secure-encrypted-form-i18n.php';
 
 		/**
 		 * The class responsible for writing the plugin diagnostic log.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-secure-encrypted-form-logger.php';
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-secure-encrypted-form-logger.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-secure-encrypted-form-admin.php';
+		require_once plugin_dir_path( __DIR__ ) . 'admin/class-secure-encrypted-form-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-secure-encrypted-form-public.php';
+		require_once plugin_dir_path( __DIR__ ) . 'public/class-secure-encrypted-form-public.php';
 
 		$this->loader = new Secure_Encrypted_Form_Loader();
-
 	}
 
 	/**
@@ -144,7 +142,6 @@ class Secure_Encrypted_Form {
 		$plugin_i18n = new Secure_Encrypted_Form_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
 	}
 
 	/**
@@ -171,7 +168,6 @@ class Secure_Encrypted_Form {
 		// Handle backend secure test form.
 		$this->loader->add_action( 'wp_ajax_send_secure_test_form', $plugin_admin, 'send_secure_test_form' );
 		$this->loader->add_action( 'wp_ajax_nopriv_send_secure_test_form', $plugin_admin, 'send_secure_test_form' );
-
 	}
 
 	/**
@@ -201,7 +197,6 @@ class Secure_Encrypted_Form {
 		// Handle fontend secure form.
 		$this->loader->add_action( 'wp_ajax_send_secure_form', $plugin_public, 'send_secure_form' );
 		$this->loader->add_action( 'wp_ajax_nopriv_send_secure_form', $plugin_public, 'send_secure_form' );
-
 	}
 
 	/**
@@ -243,5 +238,4 @@ class Secure_Encrypted_Form {
 	public function get_version() {
 		return $this->version;
 	}
-
 }
