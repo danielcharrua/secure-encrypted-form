@@ -20,32 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="sidebar-panel">
 	<h2>
-		<?php echo esc_html__( 'Donations', 'secure-encrypted-form' ); ?>
-	</h2>
-	<p>
-		<?php
-		echo esc_html__(
-			'If you find this plugin useful please consider donating to the author and keep working on the plugin. You can use the ⚡️ Lightning Network to send some sats.',
-			'secure-encrypted-form'
-		);
-		?>
-	</p>
-	<p>
-		<?php
-		printf(
-			/* Translators: %1$s and %2$s are HTML a tags, please do not translate this parameter. */
-			esc_html__(
-				'%1$sDonate here%2$s.',
-				'secure-encrypted-form'
-			),
-			'<a href="' . esc_url( 'https://charrua.es/donaciones' ) . '">',
-			'</a>',
-		);
-		?>
-	</p>
-</div>
-<div class="sidebar-panel">
-	<h2>
 		<?php echo esc_html__( 'Rate this plugin', 'secure-encrypted-form' ); ?>
 	</h2>
 	<?php
