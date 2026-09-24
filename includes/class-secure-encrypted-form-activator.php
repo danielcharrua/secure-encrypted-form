@@ -44,9 +44,12 @@ class Secure_Encrypted_Form_Activator {
 		require_once plugin_dir_path( __FILE__ ) . 'class-secure-encrypted-form-logger.php';
 
 		$plugin_options = array(
-			'email'      => '',
-			'public_key' => '',
-			'logging'    => Secure_Encrypted_Form_Logger::MODE_ERRORS,
+			'email'                => '',
+			'public_key'           => '',
+			'logging'              => Secure_Encrypted_Form_Logger::MODE_ERRORS,
+			'turnstile_enabled'    => 0,
+			'turnstile_site_key'   => '',
+			'turnstile_secret_key' => '',
 		);
 
 		if ( ! get_option( 'secure_encrypted_form_option_name' ) ) {

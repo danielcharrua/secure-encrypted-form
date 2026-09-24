@@ -328,6 +328,40 @@ class Secure_Encrypted_Form_Admin {
 			'secure_encrypted_form_setting_section',
 			array( 'description' => __( 'Log files are stored in a protected folder inside your uploads directory and never contain the message, the email addresses or the subject. Keep this on "errors only" unless you are diagnosing a problem.', 'secure-encrypted-form' ) )
 		);
+
+		add_settings_section(
+			'secure_encrypted_form_turnstile_section',
+			esc_attr__( 'Spam protection', 'secure-encrypted-form' ),
+			array( $this, 'secure_encrypted_form_turnstile_section_info' ),
+			'secure-encrypted-form'
+		);
+
+		add_settings_field(
+			'turnstile_enabled',
+			esc_attr__( 'Cloudflare Turnstile', 'secure-encrypted-form' ),
+			array( $this, 'turnstile_enabled_callback' ),
+			'secure-encrypted-form',
+			'secure_encrypted_form_turnstile_section',
+			array( 'description' => __( 'Add a Cloudflare Turnstile challenge to the public form. Both keys below are required.', 'secure-encrypted-form' ) )
+		);
+
+		add_settings_field(
+			'turnstile_site_key',
+			esc_attr__( 'Turnstile site key', 'secure-encrypted-form' ),
+			array( $this, 'turnstile_site_key_callback' ),
+			'secure-encrypted-form',
+			'secure_encrypted_form_turnstile_section',
+			array( 'description' => __( 'The public key Cloudflare gives you for this website.', 'secure-encrypted-form' ) )
+		);
+
+		add_settings_field(
+			'turnstile_secret_key',
+			esc_attr__( 'Turnstile secret key', 'secure-encrypted-form' ),
+			array( $this, 'turnstile_secret_key_callback' ),
+			'secure-encrypted-form',
+			'secure_encrypted_form_turnstile_section',
+			array( 'description' => __( 'The private key, only ever sent from your server to Cloudflare.', 'secure-encrypted-form' ) )
+		);
 	}
 
 	/**
@@ -352,6 +386,25 @@ class Secure_Encrypted_Form_Admin {
 
 		if ( isset( $input['logging'] ) && in_array( $input['logging'], Secure_Encrypted_Form_Logger::get_modes(), true ) ) {
 			$sanitized_values['logging'] = $input['logging'];
+		}
+
+		$sanitized_values['turnstile_site_key']   = isset( $input['turnstile_site_key'] ) ? sanitize_text_field( $input['turnstile_site_key'] ) : '';
+		$sanitized_values['turnstile_secret_key'] = isset( $input['turnstile_secret_key'] ) ? sanitize_text_field( $input['turnstile_secret_key'] ) : '';
+		$sanitized_values['turnstile_enabled']    = empty( $input['turnstile_enabled'] ) ? 0 : 1;
+
+		// Turning Turnstile on without both keys would block every submission,
+		// so it stays off and the administrator is told why.
+		if ( 1 === $sanitized_values['turnstile_enabled']
+			&& ( '' === $sanitized_values['turnstile_site_key'] || '' === $sanitized_values['turnstile_secret_key'] ) ) {
+
+			$sanitized_values['turnstile_enabled'] = 0;
+
+			add_settings_error(
+				'secure_encrypted_form_option_name',
+				'turnstile_missing_keys',
+				esc_html__( 'Cloudflare Turnstile needs both the site key and the secret key, so it has been left disabled.', 'secure-encrypted-form' ),
+				'error'
+			);
 		}
 
 		return $sanitized_values;
@@ -427,6 +480,72 @@ class Secure_Encrypted_Form_Admin {
 		echo '</select>';
 
 		printf( '<small>%s</small>', esc_html( $args['description'] ) );
+	}
+
+	/**
+	 * Print the spam protection section text
+	 *
+	 * @since    1.3.0
+	 */
+	public function secure_encrypted_form_turnstile_section_info() {
+
+		printf(
+			'<p>%s</p><p><em>%s</em></p>',
+			sprintf(
+				/* translators: %1$s and %2$s are HTML a tags, please do not translate this parameter. */
+				esc_html__( 'Optional. %1$sCloudflare Turnstile%2$s asks visitors to pass a check before the form is sent, without the puzzles of a traditional captcha. Leave it off if you do not need it.', 'secure-encrypted-form' ),
+				'<a href="' . esc_url( 'https://www.cloudflare.com/products/turnstile/' ) . '" target="_blank" rel="noopener noreferrer">',
+				'</a>'
+			),
+			esc_html__( 'The message is always encrypted in the browser before anything is sent, with or without Turnstile. Your visitors\' IP addresses are never sent to Cloudflare. If Cloudflare cannot be reached, messages are let through and the problem is written to the diagnostic log, so a Cloudflare outage never costs you a legitimate message.', 'secure-encrypted-form' )
+		);
+	}
+
+	/**
+	 * Turnstile enabled callback
+	 *
+	 * @since    1.3.0
+	 * @param Array $args The extra arguments to add.
+	 */
+	public function turnstile_enabled_callback( $args ) {
+
+		printf(
+			'<label><input type="checkbox" name="secure_encrypted_form_option_name[turnstile_enabled]" id="turnstile_enabled" value="1"%1$s> %2$s</label>',
+			checked( ! empty( $this->options['turnstile_enabled'] ), true, false ),
+			esc_html__( 'Enable Cloudflare Turnstile on the public form', 'secure-encrypted-form' )
+		);
+
+		printf( '<p><small>%s</small></p>', esc_html( $args['description'] ) );
+	}
+
+	/**
+	 * Turnstile site key callback
+	 *
+	 * @since    1.3.0
+	 * @param Array $args The extra arguments to add.
+	 */
+	public function turnstile_site_key_callback( $args ) {
+
+		printf(
+			'<input class="regular-text" type="text" name="secure_encrypted_form_option_name[turnstile_site_key]" id="turnstile_site_key" value="%s" autocomplete="off"><small>%s</small>',
+			isset( $this->options['turnstile_site_key'] ) ? esc_attr( $this->options['turnstile_site_key'] ) : '',
+			esc_html( $args['description'] )
+		);
+	}
+
+	/**
+	 * Turnstile secret key callback
+	 *
+	 * @since    1.3.0
+	 * @param Array $args The extra arguments to add.
+	 */
+	public function turnstile_secret_key_callback( $args ) {
+
+		printf(
+			'<input class="regular-text" type="password" name="secure_encrypted_form_option_name[turnstile_secret_key]" id="turnstile_secret_key" value="%s" autocomplete="off"><small>%s</small>',
+			isset( $this->options['turnstile_secret_key'] ) ? esc_attr( $this->options['turnstile_secret_key'] ) : '',
+			esc_html( $args['description'] )
+		);
 	}
 
 	/**

@@ -104,6 +104,11 @@ class Secure_Encrypted_Form_Public {
 		 * class.
 		 */
 
+		if ( Secure_Encrypted_Form_Turnstile::is_enabled() ) {
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Cloudflare versions this URL itself, appending ours would be wrong.
+			wp_enqueue_script( 'cloudflare-turnstile', Secure_Encrypted_Form_Turnstile::SCRIPT_URL, array(), null, true );
+		}
+
 		wp_enqueue_script( 'openpgpjs', plugin_dir_url( __DIR__ ) . 'lib/js/openpgp.min.js', array(), '6.3.0', true );
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/secure-encrypted-form-public.js', array( 'jquery', 'openpgpjs' ), $this->version, false );
 
@@ -120,6 +125,7 @@ class Secure_Encrypted_Form_Public {
 				'publicKeyArmored' => get_option( 'secure_encrypted_form_option_name' )['public_key'],
 				'errorOnKey'       => esc_html__( 'Error: it seems to be an error/typo on the encryption key. Please contact the web administrator.', 'secure-encrypted-form' ),
 				'errorOnEncrypt'   => esc_html__( 'Error: the message could not be encrypted, the encryption key may have expired. Please contact the web administrator.', 'secure-encrypted-form' ),
+				'turnstileEnabled' => Secure_Encrypted_Form_Turnstile::is_enabled(),
 			)
 		);
 	}
@@ -147,6 +153,7 @@ class Secure_Encrypted_Form_Public {
 		$form .= '<input type="text" id="subject" name="subject">';
 		$form .= '</div>';
 		$form .= '<input type="hidden" id="encryptedMessage" name="encryptedMessage">';
+		$form .= Secure_Encrypted_Form_Turnstile::get_widget_markup();
 		$form .= '</form>';
 		$form .= '<div id="message-group" class="form-group">';
 		$form .= '<label for="message">' . esc_html__( 'Message', 'secure-encrypted-form' ) . '</label>';
@@ -167,6 +174,26 @@ class Secure_Encrypted_Form_Public {
 
 		// This is a secure process to validate if this request comes from a valid source.
 		check_ajax_referer( 'secure_form_nonce', 'security' );
+
+		// Spam check, before anything else is done with the submission. It has to
+		// happen here and not in the browser: a bot would just skip it there.
+		if ( Secure_Encrypted_Form_Turnstile::is_enabled() ) {
+			$turnstile = new Secure_Encrypted_Form_Turnstile( $this->logger );
+			$token     = isset( $_POST[ Secure_Encrypted_Form_Turnstile::TOKEN_FIELD ] )
+				? sanitize_text_field( wp_unslash( $_POST[ Secure_Encrypted_Form_Turnstile::TOKEN_FIELD ] ) )
+				: '';
+
+			if ( ! $turnstile->verify( $token ) ) {
+				echo wp_json_encode(
+					array(
+						'success' => false,
+						'errors'  => array( 'turnstile' => true ),
+						'message' => esc_html__( 'Error: the spam check could not be completed, please try again.', 'secure-encrypted-form' ),
+					)
+				);
+				wp_die();
+			}
+		}
 
 		// Activate wp_mail errors.
 		add_action( 'wp_mail_failed', array( $this, 'debug_wp_mail_failure' ) );

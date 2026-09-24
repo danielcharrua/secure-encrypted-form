@@ -115,6 +115,11 @@ class Secure_Encrypted_Form {
 		require_once plugin_dir_path( __DIR__ ) . 'includes/class-secure-encrypted-form-logger.php';
 
 		/**
+		 * The class responsible for the optional Turnstile spam protection.
+		 */
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-secure-encrypted-form-turnstile.php';
+
+		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( __DIR__ ) . 'admin/class-secure-encrypted-form-admin.php';

@@ -1,6 +1,6 @@
 {
   "name": "secure-encrypted-form",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Development tooling for the Secure Encrypted Form WordPress plugin. The plugin itself ships no npm dependencies.",
   "private": true,
   "license": "GPL-2.0-or-later",

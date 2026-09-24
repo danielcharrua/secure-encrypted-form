@@ -74,6 +74,18 @@
 				security: data.nonce,
 			};
 
+			// Turnstile tokens are single use and expire, so the widget has to be
+			// reset after every attempt or a second message would always fail.
+			if ( data.turnstileEnabled && 'undefined' !== typeof turnstile ) {
+				formData['cf-turnstile-response'] = turnstile.getResponse();
+			}
+
+			const resetTurnstile = function () {
+				if ( data.turnstileEnabled && 'undefined' !== typeof turnstile ) {
+					turnstile.reset();
+				}
+			};
+
 			$.ajax({
 				url: data.ajaxUrl,
 				type: 'post',
@@ -123,6 +135,7 @@
 						// Enable form
 						$( '.secure-form :input' ).prop( 'disabled', false );
 						$( '.spinner-wrapper' ).remove();
+						resetTurnstile();
 
 					} else {
 						$( '.secure-form' ).append( 
@@ -138,6 +151,7 @@
 						// Enable form
 						$( '.secure-form :input' ).prop( 'disabled', false );
 						$( '.spinner-wrapper' ).remove();
+						resetTurnstile();
 
 						// Delete alert message
 						setTimeout(function() { 
@@ -153,6 +167,7 @@
 					// Enable form
 					$( '.secure-form :input' ).prop( 'disabled', false );
 					$( '.spinner-wrapper' ).remove();
+					resetTurnstile();
 
 					// Delete alert message
 					setTimeout(function() { 

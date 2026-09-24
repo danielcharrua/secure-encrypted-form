@@ -5,7 +5,7 @@ Tags: contact, form, contact form, openpgp, encrypted form, feedback, email, enc
 Requires at least: 5.3
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,14 @@ Remember this support is offered for free and can take some hours/days to answer
 
 It is hard to continue development and support for this free plugin without contributions from users like you. **If you enjoy using Secure Contact Form and find it useful, please consider [making a donation](https://charrua.es/donaciones/)**. Your donation will help encourage and support the plugin's continued development and better user support.
 
+= Spam protection (optional) =
+
+The plugin can add a [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) challenge to the form. It is **disabled by default** and does nothing until you enable it and enter your site key and secret key in the plugin settings.
+
+The message is always encrypted in your visitor's browser before anything is sent, with or without Turnstile.
+
+If Cloudflare cannot be reached, submissions are allowed through and the problem is written to the diagnostic log, so an outage never costs you a legitimate message.
+
 = Privacy notices =
 
 With the default configuration, this plugin, in itself, does not:
@@ -93,6 +101,18 @@ With the default configuration, this plugin, in itself, does not:
 * Write any user personal data to the database
 * Send any data to external servers
 * Use cookies
+
+= External services =
+
+This plugin does not connect to any external service unless you enable Cloudflare Turnstile in its settings.
+
+When you do enable it, the plugin relies on Cloudflare Turnstile to tell human visitors apart from bots:
+
+* The form loads the Turnstile widget script from `https://challenges.cloudflare.com/turnstile/v0/api.js`. Loading it makes the visitor's browser contact Cloudflare, which collects the data described in their documentation to run the challenge.
+* When the form is submitted, your server sends the token produced by the widget, together with your secret key, to `https://challenges.cloudflare.com/turnstile/v0/siteverify` to check whether the challenge was passed.
+* The plugin never sends the message, the form fields or the visitor's IP address to Cloudflare.
+
+Cloudflare's [terms of service](https://www.cloudflare.com/website-terms/) and [privacy policy](https://www.cloudflare.com/privacypolicy/) apply to that service.
 
 = Translations =
 
@@ -110,7 +130,7 @@ You will find **Secure Encrypted Form** menu in your WordPress admin screen. Onc
 
 = How to prevent and filter SPAM? =
 
-You can use some service like Google Recaptcha v3 for now. More comming soon.
+The plugin has built in support for Cloudflare Turnstile. Create a free Turnstile site in your Cloudflare dashboard, then enable it in the plugin settings and paste the site key and the secret key. It is off by default.
 
 = My server is not sending emails =
 
@@ -124,6 +144,11 @@ Your server may be restricted or disabled to send emails. In that case you can u
 4. Form rendered
 
 == Changelog ==
+
+= 1.3.0 =
+* Added optional spam protection with Cloudflare Turnstile. It is disabled by default and needs both the site key and the secret key to switch on, so nothing changes unless you enable it.
+* If Cloudflare cannot be reached, or your secret key is wrong, messages are allowed through and the problem is written to the diagnostic log. A Cloudflare outage never costs you a legitimate message.
+* Your visitors' IP addresses are never sent to Cloudflare.
 
 = 1.2.0 =
 * Security: log files are no longer written to a predictable, publicly reachable path inside the uploads folder. The log directory now carries a random suffix and ships with server rules that block direct web access. Existing logs are moved to the protected location automatically. Reported by a plugin user, thank you.
@@ -162,6 +187,9 @@ Your server may be restricted or disabled to send emails. In that case you can u
 * Initial launch.
 
 == Upgrade Notice ==
+
+= 1.3.0 =
+* Adds optional Cloudflare Turnstile spam protection, disabled by default.
 
 = 1.2.0 =
 * Security release: plugin logs are no longer web accessible and no longer store sender addresses or subjects. Please update. Also adds WordPress 7.1 compatibility.

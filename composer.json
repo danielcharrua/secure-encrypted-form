@@ -26,15 +26,18 @@
         "lint": "phpcs",
         "lint:fix": "phpcbf",
         "test:crypto": "node --test 'tests/js/*.test.mjs'",
+        "test:turnstile": "php tests/php/turnstile-test.php",
         "test": [
             "@lint",
-            "@test:crypto"
+            "@test:crypto",
+            "@test:turnstile"
         ]
     },
     "scripts-descriptions": {
         "lint": "Check the code against the WordPress coding standards.",
         "lint:fix": "Fix automatically solvable coding standard violations.",
         "test:crypto": "Run the OpenPGP encryption and decryption tests.",
+        "test:turnstile": "Run the Turnstile verification tests.",
         "test": "Run every check that does not need a WordPress installation."
     }
 }

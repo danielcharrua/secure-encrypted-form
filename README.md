@@ -45,10 +45,11 @@ across the classes.
 ## Commands
 
 ```bash
-composer lint         # check the code against the WordPress coding standards
-composer lint:fix     # fix what can be fixed automatically
-composer test:crypto  # run the encryption tests
-composer test         # lint and test together
+composer lint           # check the code against the WordPress coding standards
+composer lint:fix       # fix what can be fixed automatically
+composer test:crypto    # run the encryption tests
+composer test:turnstile # run the Turnstile verification tests
+composer test           # lint and test together
 npm run keys:generate # regenerate the throwaway test keys
 ./build.sh            # produce release/secure-encrypted-form.zip
 ```
@@ -85,6 +86,34 @@ with typed arrays created by the host.
 `tests/fixtures/` holds an OpenPGP key pair and an expired public key, all
 committed on purpose. **They are throwaway keys used only by the tests and
 protect nothing.** Never reuse them. Regenerate them with `npm run keys:generate`.
+
+## Spam protection
+
+`Secure_Encrypted_Form_Turnstile` adds an optional Cloudflare Turnstile check,
+off by default. It only switches on when the `turnstile_enabled` setting is set
+and both keys are present; a half configured widget would block every
+submission, so it counts as disabled.
+
+Three decisions are worth knowing before changing this code:
+
+- **Verification happens on the server**, in the AJAX handler, before anything
+  is done with the submission. Checking in the browser would be pointless: a bot
+  posting straight to `admin-ajax.php` would skip it.
+- **It fails open.** If Cloudflare is unreachable, answers a non 200 status,
+  returns something unreadable, or rejects the secret key, the message is sent
+  and an error is logged. For a form whose purpose is receiving sensitive
+  messages, losing a real one is worse than letting spam through. A *missing*
+  token is the exception and is always rejected, otherwise any bot could skip
+  the check by not sending the field.
+- **The visitor IP is never sent to Cloudflare**, even though `siteverify`
+  accepts it.
+
+Turnstile tokens are single use and expire after five minutes, and this form
+never reloads the page, so the widget is reset after every attempt. Forgetting
+that is what breaks a second submission.
+
+`tests/php/turnstile-test.php` covers these branches with stubs, including the
+outage paths that are impractical to reproduce by hand.
 
 ## Logging
 
