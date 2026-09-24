@@ -125,6 +125,7 @@ class Secure_Encrypted_Form_Public {
 				'publicKeyArmored' => get_option( 'secure_encrypted_form_option_name' )['public_key'],
 				'errorOnKey'       => esc_html__( 'Error: it seems to be an error/typo on the encryption key. Please contact the web administrator.', 'secure-encrypted-form' ),
 				'errorOnEncrypt'   => esc_html__( 'Error: the message could not be encrypted, the encryption key may have expired. Please contact the web administrator.', 'secure-encrypted-form' ),
+				'errorNoSecureCtx' => esc_html__( 'Error: this page is not served over a secure connection (HTTPS), so your browser will not allow the message to be encrypted. Nothing has been sent. Please contact the web administrator.', 'secure-encrypted-form' ),
 				'turnstileEnabled' => Secure_Encrypted_Form_Turnstile::is_enabled(),
 			)
 		);

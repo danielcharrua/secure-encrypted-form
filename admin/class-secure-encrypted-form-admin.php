@@ -135,6 +135,7 @@ class Secure_Encrypted_Form_Admin {
 				'nonce'            => wp_create_nonce( 'secure_test_form_nonce' ),
 				'publicKeyArmored' => get_option( 'secure_encrypted_form_option_name' )['public_key'],
 				'errorOnKey'       => esc_html__( 'Error E4: it seems to be an error/typo on your public key string. Please export it again and paste it in ASCII-Armor.', 'secure-encrypted-form' ),
+				'errorNoSecureCtx' => esc_html__( 'Error E7: this site is not served over HTTPS, so your browser will not allow encryption. Your key is fine, the site needs an SSL certificate.', 'secure-encrypted-form' ),
 			)
 		);
 	}
@@ -157,6 +158,50 @@ class Secure_Encrypted_Form_Admin {
 
 				printf( '<div class="%1$s"><p>%2$s <a href="%3$s">%4$s</a></p></div>', esc_attr( $class ), esc_html( $message ), esc_url( $url ), esc_html( $link_text ) );
 		}
+	}
+
+	/**
+	 * Warn when the site is not served over HTTPS.
+	 *
+	 * Browsers only expose the WebCrypto API in a secure context, so on a plain
+	 * HTTP site the form cannot encrypt anything at all. Without this notice the
+	 * only symptom is an error message blaming the encryption key, which sends
+	 * people off exporting their key again for nothing.
+	 *
+	 * @since    1.3.0
+	 */
+	public function show_insecure_context_notice() {
+
+		if ( self::is_secure_context() ) {
+			return;
+		}
+
+		printf(
+			'<div class="notice notice-error"><p><strong>%1$s</strong> %2$s</p></div>',
+			esc_html__( 'Secure Encrypted Form:', 'secure-encrypted-form' ),
+			esc_html__( 'this site is not served over HTTPS, so browsers will not allow the form to encrypt messages and no message can be sent. Install an SSL certificate and serve the site over HTTPS.', 'secure-encrypted-form' )
+		);
+	}
+
+	/**
+	 * Check whether the site looks like a browser secure context.
+	 *
+	 * This is a server side guess: the browser has the final word, and the form
+	 * checks again before encrypting. Local addresses count as secure contexts
+	 * even over plain HTTP, which is what makes local development work.
+	 *
+	 * @since    1.3.0
+	 * @return   bool    Whether browsers should grant access to WebCrypto.
+	 */
+	public static function is_secure_context() {
+
+		if ( is_ssl() || str_starts_with( (string) get_option( 'home' ), 'https://' ) ) {
+			return true;
+		}
+
+		$host = wp_parse_url( get_option( 'home' ), PHP_URL_HOST );
+
+		return in_array( $host, array( 'localhost', '127.0.0.1', '[::1]', '::1' ), true );
 	}
 
 	/**

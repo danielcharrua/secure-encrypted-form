@@ -69,6 +69,16 @@ This is the property worth protecting from regressions, and `tests/js/` asserts
 it directly: neither the ciphertext nor the request payload may contain the
 plaintext.
 
+**The plugin only works in a browser secure context**, because WebCrypto is only
+exposed over HTTPS (and on `localhost`). On a plain HTTP site OpenPGP.js refuses
+to start with "The WebCrypto API is not available" and nothing can be sent. Both
+forms check `window.isSecureContext` before encrypting and say so plainly, and
+the admin shows a notice, because the symptom otherwise looks exactly like a
+corrupt key and sends people off re-exporting a perfectly good one.
+
+Note this when testing locally: a LocalWP style `.local` domain over HTTP is not
+a secure context, only literal `localhost` is.
+
 ## Tests
 
 The encryption tests run on Node's built in test runner:

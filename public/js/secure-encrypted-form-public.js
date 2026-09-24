@@ -12,6 +12,17 @@
 			$( '.form-group' ).removeClass( 'has-error' );
 			$( '.help-block' ).remove();
 
+			// Browsers only expose WebCrypto in a secure context, and OpenPGP.js
+			// refuses to run without it. Checking here keeps the failure honest:
+			// otherwise it surfaces as an error blaming the encryption key.
+			if ( ! window.isSecureContext ) {
+				$( '.secure-form' ).append(
+					'<div class="alert alert-danger">' + data.errorNoSecureCtx + '</div>'
+				);
+
+				return;
+			}
+
 			// Disable form
 			$( '.secure-form :input' ).prop( 'disabled', true );
 			$( '.secure-form' ).append( '<div class="spinner-wrapper"><span class="spinner"></span></div>' );

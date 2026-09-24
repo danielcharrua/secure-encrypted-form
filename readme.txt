@@ -64,6 +64,8 @@ You will only be able to decrypt the content of the attached file if you have th
 
 = Requirements =
 
+**Your site must be served over HTTPS.** The message is encrypted by the visitor's browser, and browsers only allow encryption on secure connections. On a plain HTTP site no message can be sent at all. If your site is not on HTTPS yet, ask your hosting provider for an SSL certificate, they are usually free.
+
 In order to use this plugin you need to have or create a **PGP key pair**. If you don't have your key pair generated you can browse the internet on how to generate it.
 There are many ways to generate the key, each have a different impact on security.
 
@@ -132,6 +134,10 @@ You will find **Secure Encrypted Form** menu in your WordPress admin screen. Onc
 
 The plugin has built in support for Cloudflare Turnstile. Create a free Turnstile site in your Cloudflare dashboard, then enable it in the plugin settings and paste the site key and the secret key. It is off by default.
 
+= I get an error about my encryption key, but the key is fine =
+
+Check that your site is served over HTTPS. Browsers only give access to the encryption API on secure connections, so on an HTTP site the form cannot encrypt anything. From version 1.3.0 the plugin tells you this directly, both in the admin and in the form.
+
 = My server is not sending emails =
 
 Your server may be restricted or disabled to send emails. In that case you can use a SMTP plugin to send authenticated emails as [WP Mail SMTP](https://es.wordpress.org/plugins/wp-mail-smtp/). Always remember to check your SPAM folder.
@@ -146,6 +152,8 @@ Your server may be restricted or disabled to send emails. In that case you can u
 == Changelog ==
 
 = 1.3.0 =
+* The plugin now warns you when your site is not served over HTTPS. Browsers only allow encryption on secure connections, so on an HTTP site no message can be sent, and until now the only symptom was an error blaming your encryption key.
+* The test email form now shows the underlying error instead of always reporting a problem with the public key.
 * Added optional spam protection with Cloudflare Turnstile. It is disabled by default and needs both the site key and the secret key to switch on, so nothing changes unless you enable it.
 * If Cloudflare cannot be reached, or your secret key is wrong, messages are allowed through and the problem is written to the diagnostic log. A Cloudflare outage never costs you a legitimate message.
 * Your visitors' IP addresses are never sent to Cloudflare.
