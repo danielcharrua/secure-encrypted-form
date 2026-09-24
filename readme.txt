@@ -42,10 +42,10 @@ your-long-key-string-will-be-here
 
 Once the shortcode is placed into a page or post, it will render a form with the following fields:
 
-* Message
-* Subject
 * Name
 * Email
+* Subject
+* Message
 
 = How it works =
 The *message* field will be encrypted with your **PGP public key** and sent as an attachment in **ASCII** format to the destination email you have configured.
@@ -121,7 +121,7 @@ Your server may be restricted or disabled to send emails. In that case you can u
 1. Plugin options
 2. Plugin debug log
 3. Inserting through shortcode
-2. Form rendered
+4. Form rendered
 
 == Changelog ==
 
