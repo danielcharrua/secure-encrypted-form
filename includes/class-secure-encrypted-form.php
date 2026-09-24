@@ -15,8 +15,7 @@
 /**
  * The core plugin class.
  *
- * This is used to define internationalization, admin-specific hooks, and
- * public-facing site hooks.
+ * This is used to define admin-specific hooks and public-facing site hooks.
  *
  * Also maintains the unique identifier of this plugin as well as the current
  * version of the plugin.
@@ -60,8 +59,8 @@ class Secure_Encrypted_Form {
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
-	 * Load the dependencies, define the locale, and set the hooks for the admin area and
-	 * the public-facing side of the site.
+	 * Load the dependencies and set the hooks for the admin area and the
+	 * public-facing side of the site.
 	 *
 	 * @since    1.0.0
 	 */
@@ -74,7 +73,6 @@ class Secure_Encrypted_Form {
 		$this->plugin_name = 'secure-encrypted-form';
 
 		$this->load_dependencies();
-		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 	}
@@ -85,7 +83,6 @@ class Secure_Encrypted_Form {
 	 * Include the following files that make up the plugin:
 	 *
 	 * - Secure_Encrypted_Form_Loader. Orchestrates the hooks of the plugin.
-	 * - Secure_Encrypted_Form_i18n. Defines internationalization functionality.
 	 * - Secure_Encrypted_Form_Admin. Defines all hooks for the admin area.
 	 * - Secure_Encrypted_Form_Public. Defines all hooks for the public side of the site.
 	 *
@@ -102,12 +99,6 @@ class Secure_Encrypted_Form {
 		 * core plugin.
 		 */
 		require_once plugin_dir_path( __DIR__ ) . 'includes/class-secure-encrypted-form-loader.php';
-
-		/**
-		 * The class responsible for defining internationalization functionality
-		 * of the plugin.
-		 */
-		require_once plugin_dir_path( __DIR__ ) . 'includes/class-secure-encrypted-form-i18n.php';
 
 		/**
 		 * The class responsible for writing the plugin diagnostic log.
@@ -131,22 +122,6 @@ class Secure_Encrypted_Form {
 		require_once plugin_dir_path( __DIR__ ) . 'public/class-secure-encrypted-form-public.php';
 
 		$this->loader = new Secure_Encrypted_Form_Loader();
-	}
-
-	/**
-	 * Define the locale for this plugin for internationalization.
-	 *
-	 * Uses the Secure_Encrypted_Form_i18n class in order to set the domain and to register the hook
-	 * with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function set_locale() {
-
-		$plugin_i18n = new Secure_Encrypted_Form_i18n();
-
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 	}
 
 	/**
@@ -216,7 +191,7 @@ class Secure_Encrypted_Form {
 
 	/**
 	 * The name of the plugin used to uniquely identify it within the context of
-	 * WordPress and to define internationalization functionality.
+	 * WordPress.
 	 *
 	 * @since     1.0.0
 	 * @return    string    The name of the plugin.

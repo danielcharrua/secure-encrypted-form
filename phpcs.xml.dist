@@ -48,9 +48,4 @@
 		<exclude-pattern>*/class-secure-encrypted-form-public.php</exclude-pattern>
 	</rule>
 
-	<!-- Secure_Encrypted_Form_i18n follows the WordPress Plugin Boilerplate naming. -->
-	<rule ref="PEAR.NamingConventions.ValidClassName.Invalid">
-		<exclude-pattern>*/class-secure-encrypted-form-i18n.php</exclude-pattern>
-	</rule>
-
 </ruleset>
