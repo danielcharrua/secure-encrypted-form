@@ -132,7 +132,7 @@ class Secure_Encrypted_Form_Admin {
 			'data',
 			array(
 				'ajaxUrl'          => admin_url( 'admin-ajax.php' ),
-				'nonce'            => wp_create_nonce( 'secure_form_nonce' ),
+				'nonce'            => wp_create_nonce( 'secure_test_form_nonce' ),
 				'publicKeyArmored' => get_option( 'secure_encrypted_form_option_name' )['public_key'],
 				'errorOnKey'       => esc_html__( 'Error E4: it seems to be an error/typo on your public key string. Please export it again and paste it in ASCII-Armor.', 'secure-encrypted-form' ),
 			)
@@ -437,7 +437,19 @@ class Secure_Encrypted_Form_Admin {
 	public function send_secure_test_form() {
 
 		// This is a secure process to validate if this request comes from a valid source.
-		check_ajax_referer( 'secure_form_nonce', 'security' );
+		check_ajax_referer( 'secure_test_form_nonce', 'security' );
+
+		// Sending test emails is an administrator action, the nonce alone is not enough.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			echo wp_json_encode(
+				array(
+					'success' => false,
+					'errors'  => array( 'server' => true ),
+					'message' => esc_html__( 'Error: you are not allowed to send test emails.', 'secure-encrypted-form' ),
+				)
+			);
+			wp_die();
+		}
 
 		// Activate wp_mail errors.
 		add_action( 'wp_mail_failed', array( $this, 'debug_wp_mail_failure' ) );

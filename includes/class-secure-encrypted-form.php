@@ -165,9 +165,9 @@ class Secure_Encrypted_Form {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
 		// The wp_ajax_ is telling WordPress to use ajax and send_secure_form is the hook name to use in JavaScript.
-		// Handle backend secure test form.
+		// Handle backend secure test form. It is deliberately not registered for
+		// logged out users: only administrators may send test emails.
 		$this->loader->add_action( 'wp_ajax_send_secure_test_form', $plugin_admin, 'send_secure_test_form' );
-		$this->loader->add_action( 'wp_ajax_nopriv_send_secure_test_form', $plugin_admin, 'send_secure_test_form' );
 	}
 
 	/**

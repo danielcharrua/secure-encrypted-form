@@ -23,10 +23,12 @@
 				publicKey = await openpgp.readKey( { armoredKey: data.publicKeyArmored } );
 			} catch (error) {
 				// Give failed feedback to user
-				$( '.secure-form' ).append( 
+				$( '.secure-form' ).append(
 					'<div class="alert alert-danger">' + data.errorOnKey + '</div>'
 				);
 
+				// Enable form
+				$( '.secure-form :input' ).prop( 'disabled', false );
 				$( '.spinner-wrapper' ).remove();
 
 				return;
@@ -35,11 +37,32 @@
 
 			let message = $( '#message' ).val();
 
-			const encrypted = await openpgp.encrypt({
-				message: await openpgp.createMessage( { text: message } ),
-				encryptionKeys: publicKey,
-				//signingKeys: privateKey
-			});
+			// An expired key parses fine but fails here, so encryption needs its
+			// own feedback: without it the form stays disabled with no message.
+			let encrypted;
+
+			try {
+				encrypted = await openpgp.encrypt({
+					message: await openpgp.createMessage( { text: message } ),
+					encryptionKeys: publicKey,
+					//signingKeys: privateKey
+				});
+			} catch (error) {
+				$( '.secure-form' ).append(
+					'<div class="alert alert-danger">' + data.errorOnEncrypt + '</div>'
+				);
+
+				// Enable form
+				$( '.secure-form :input' ).prop( 'disabled', false );
+				$( '.spinner-wrapper' ).remove();
+
+				// Delete alert message
+				setTimeout(function() {
+					$( '.secure-form .alert' ).remove();
+				}, 10000);
+
+				return;
+			}
 
 			let formData = {
 				action: 'send_secure_form',

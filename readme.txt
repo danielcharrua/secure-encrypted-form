@@ -131,6 +131,8 @@ Your server may be restricted or disabled to send emails. In that case you can u
 * Security: hardened the log viewer so it can only open the plugin's own log files.
 * Added a "Diagnostic log" setting with three levels: disabled, errors only (the default) and full log. The log folder is only created when there is something to write.
 * Logging is now handled by a single shared class instead of duplicated code in the admin and public sides.
+* Security: the test email form is now restricted to administrators. Its endpoint was also registered for logged out visitors and shared a nonce with the public form, so anyone could trigger test emails.
+* Fixed the form hanging on the spinner with no message when the encryption key has expired. An expired key fails when encrypting, not when it is read, and that case had no feedback.
 * Fixed an unexpected mail error leaving the form without an answer: the visitor got no feedback and nothing was written to the log. Any failure is now reported and logged.
 * Uninstalling the plugin now deletes its log files.
 * Updated Monolog from 2.8.0 to 2.11.1, which removes the deprecation notices shown on PHP 8.4 and newer.

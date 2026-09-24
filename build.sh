@@ -43,4 +43,8 @@ cd "$RELEASE_DIR"
 zip -r "$PLUGIN_SLUG.zip" "$PLUGIN_SLUG" --quiet
 cd ..
 
+# Restore the dev dependencies the build step removed, so linting and tests
+# keep working right after a build.
+composer install --quiet
+
 echo "Done: $RELEASE_DIR/$PLUGIN_SLUG.zip"
