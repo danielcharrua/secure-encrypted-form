@@ -152,6 +152,7 @@ Your server may be restricted or disabled to send emails. In that case you can u
 == Changelog ==
 
 = 1.3.0 =
+* Added a "Delete all log files" button to the Debug log screen. Useful if you are upgrading from a version before 1.2.0, whose logs recorded the email addresses and subject of every message.
 * The plugin now warns you when your site is not served over HTTPS. Browsers only allow encryption on secure connections, so on an HTTP site no message can be sent, and until now the only symptom was an error blaming your encryption key.
 * The test email form now shows the underlying error instead of always reporting a problem with the public key.
 * Added optional spam protection with Cloudflare Turnstile. It is disabled by default and needs both the site key and the secret key to switch on, so nothing changes unless you enable it.

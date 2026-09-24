@@ -38,6 +38,12 @@
 				</div>
 			<?php endif; ?>
 
+			<?php if ( $logs_deleted ) : ?>
+				<div class="notice notice-success inline">
+					<p><?php echo esc_html__( 'The log files have been deleted.', 'secure-encrypted-form' ); ?></p>
+				</div>
+			<?php endif; ?>
+
 			<?php if ( empty( $logs ) ) : ?>
 				<p><?php echo esc_html__( 'There are no log files yet.', 'secure-encrypted-form' ); ?></p>
 			<?php else : ?>
@@ -52,6 +58,17 @@
 				</select>
 				<?php wp_nonce_field( 'sef-debug-logs' ); ?>
 				<input class="button" type="submit" value="<?php echo esc_html__( 'View', 'secure-encrypted-form' ); ?>">
+			</form>
+
+			<h2><?php echo esc_html__( 'Delete log files', 'secure-encrypted-form' ); ?></h2>
+			<p>
+				<?php echo esc_html__( 'Logs written by versions before 1.2.0 recorded the email addresses and the subject of each message. Deleting them removes every log file the plugin has stored. This cannot be undone.', 'secure-encrypted-form' ); ?>
+			</p>
+			<form method="post" onsubmit="return confirm( '<?php echo esc_js( __( 'Delete all plugin log files? This cannot be undone.', 'secure-encrypted-form' ) ); ?>' );">
+				<?php wp_nonce_field( 'sef-delete-logs' ); ?>
+				<button type="submit" name="delete_logs" value="1" class="button button-link-delete">
+					<?php echo esc_html__( 'Delete all log files', 'secure-encrypted-form' ); ?>
+				</button>
 			</form>
 			<?php endif; ?>
 

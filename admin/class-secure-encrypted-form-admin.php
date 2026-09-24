@@ -288,11 +288,23 @@ class Secure_Encrypted_Form_Admin {
 	 */
 	public function secure_encrypted_form_debug_log_page() {
 
-		// Read the log files from the folder.
-		$logs = $this->get_debug_logs();
-
 		$selected_log_content = false;
 		$selected_log         = false;
+		$logs_deleted         = false;
+
+		// Deleting happens before the listing is read, so the page reflects it.
+		if ( isset( $_POST['delete_logs'] )
+			&& isset( $_REQUEST['_wpnonce'] )
+			&& wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), 'sef-delete-logs' )
+			&& current_user_can( 'manage_options' ) ) {
+
+			Secure_Encrypted_Form_Logger::delete_logs();
+
+			$logs_deleted = true;
+		}
+
+		// Read the log files from the folder.
+		$logs = $this->get_debug_logs();
 
 		if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), 'sef-debug-logs' ) ) {
 
