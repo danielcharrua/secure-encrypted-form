@@ -125,6 +125,24 @@ that is what breaks a second submission.
 `tests/php/turnstile-test.php` covers these branches with stubs, including the
 outage paths that are impractical to reproduce by hand.
 
+### Testing it by hand
+
+Cloudflare publishes dummy keys that work on any hostname, a `.local`
+development domain included, so there is no need to register a real site:
+
+| Behaviour | Site key | Secret key |
+| --- | --- | --- |
+| Always passes | `1x00000000000000000000AA` | `1x0000000000000000000000000000000AA` |
+| Always blocks | `2x00000000000000000000AB` | `2x0000000000000000000000000000000AA` |
+| Forces an interactive challenge | `3x00000000000000000000FF` | `1x0000000000000000000000000000000AA` |
+
+The browser still downloads the widget from Cloudflare and the server still
+calls `siteverify`, so both need internet access. The full list is in
+[Cloudflare's testing documentation](https://developers.cloudflare.com/turnstile/troubleshooting/testing/).
+
+Worth checking by hand: send two messages in a row without reloading the page.
+That is what catches a missing widget reset, and no unit test will see it.
+
 ## Logging
 
 The plugin writes a diagnostic log through `Secure_Encrypted_Form_Logger`. Three

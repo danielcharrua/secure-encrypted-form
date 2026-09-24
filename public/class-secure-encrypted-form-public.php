@@ -154,12 +154,14 @@ class Secure_Encrypted_Form_Public {
 		$form .= '<input type="text" id="subject" name="subject">';
 		$form .= '</div>';
 		$form .= '<input type="hidden" id="encryptedMessage" name="encryptedMessage">';
-		$form .= Secure_Encrypted_Form_Turnstile::get_widget_markup();
 		$form .= '</form>';
 		$form .= '<div id="message-group" class="form-group">';
 		$form .= '<label for="message">' . esc_html__( 'Message', 'secure-encrypted-form' ) . '</label>';
 		$form .= '<textarea id="message" name="message" rows="5"></textarea>';
 		$form .= '</div>';
+		// Right above the submit button: the token is read with
+		// turnstile.getResponse(), so the widget can live outside the form element.
+		$form .= Secure_Encrypted_Form_Turnstile::get_widget_markup();
 		$form .= '<input type="submit" form="sform" name="submit" value="' . esc_attr__( 'Submit', 'secure-encrypted-form' ) . '">';
 		$form .= '</div>';
 
