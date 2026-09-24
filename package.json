@@ -1,0 +1,20 @@
+{
+  "name": "secure-encrypted-form",
+  "version": "1.2.0",
+  "description": "Development tooling for the Secure Encrypted Form WordPress plugin. The plugin itself ships no npm dependencies.",
+  "private": true,
+  "license": "GPL-2.0-or-later",
+  "type": "module",
+  "scripts": {
+    "test": "node --test 'tests/js/*.test.mjs'",
+    "keys:generate": "node tests/fixtures/generate-keys.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielcharrua/secure-encrypted-form.git"
+  },
+  "bugs": {
+    "url": "https://github.com/danielcharrua/secure-encrypted-form/issues"
+  },
+  "homepage": "https://github.com/danielcharrua/secure-encrypted-form#readme"
+}
