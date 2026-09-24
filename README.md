@@ -176,11 +176,20 @@ The release steps:
 
 1. Update the three version numbers and set `Tested up to:` to the WordPress
    version you tested against.
-2. Add a `== Changelog ==` section to `readme.txt` describing what changed for
+1. Regenerate the translation template if any translatable string changed:
+
+   ```bash
+   wp i18n make-pot . languages/secure-encrypted-form.pot \
+     --exclude=lib,tests,node_modules,release --domain=secure-encrypted-form
+   ```
+
+   This needs [WP-CLI](https://wp-cli.org/). If you do not have it installed,
+   download `wp-cli.phar` and run it with `php wp-cli.phar i18n make-pot …`.
+1. Add a `== Changelog ==` section to `readme.txt` describing what changed for
    users, plus an `== Upgrade Notice ==` entry.
-3. Run `composer lint` and `composer test`.
-4. Check the plugin with [Plugin Check](https://wordpress.org/plugins/plugin-check/).
-5. Commit, then push a tag named after the version.
+1. Run `composer lint` and `composer test`.
+1. Check the plugin with [Plugin Check](https://wordpress.org/plugins/plugin-check/).
+1. Commit, then push a tag named after the version.
 
 Pushing a tag triggers `.github/workflows/deploy.yml`, which builds the plugin
 and publishes it to the WordPress.org SVN repository. Pushing to the `trunk`

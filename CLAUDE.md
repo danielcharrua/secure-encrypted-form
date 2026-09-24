@@ -29,3 +29,6 @@ composer test         # both
   reachable.
 - Releases are cut by pushing a git tag, which deploys to WordPress.org. Nothing
   runs on a normal push.
+- Regenerate `languages/secure-encrypted-form.pot` with WP-CLI whenever a
+  translatable string changes; the command is in `README.md`. It is easy to
+  forget: the template had been stale since 1.0.1.
