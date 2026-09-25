@@ -139,10 +139,12 @@ Your server may be restricted or disabled to send emails. In that case you can u
 
 == Screenshots ==
 
-1. Plugin options
-2. Plugin debug log
-3. Inserting through shortcode
-4. Form rendered
+1. Plugin settings: destination email, your OpenPGP public key and the diagnostic log level.
+2. Optional spam protection with Cloudflare Turnstile, disabled by default.
+3. The form as your visitors see it.
+4. The same form with the Turnstile challenge enabled.
+5. The diagnostic log, which never records email addresses or subjects.
+6. Inserting the form in any page or post with a shortcode.
 
 == Changelog ==
 
