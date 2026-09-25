@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-24T16:17:48+00:00\n"
+"POT-Creation-Date: 2026-09-25T08:29:22+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: secure-encrypted-form\n"
@@ -59,152 +59,141 @@ msgid "this site is not served over HTTPS, so browsers will not allow the form t
 msgstr ""
 
 #: admin/class-secure-encrypted-form-admin.php:224
-#: admin/class-secure-encrypted-form-admin.php:257
-#: admin/class-secure-encrypted-form-admin.php:258
-#: admin/class-secure-encrypted-form-admin.php:357
+#: admin/class-secure-encrypted-form-admin.php:252
+#: admin/class-secure-encrypted-form-admin.php:253
+#: admin/class-secure-encrypted-form-admin.php:352
 msgid "Settings"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:228
-msgid "Donate"
-msgstr ""
-
-#: admin/class-secure-encrypted-form-admin.php:266
-#: admin/class-secure-encrypted-form-admin.php:267
+#: admin/class-secure-encrypted-form-admin.php:261
+#: admin/class-secure-encrypted-form-admin.php:262
 msgid "Debug log"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:364
+#: admin/class-secure-encrypted-form-admin.php:359
 msgid "Destination email"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:368
+#: admin/class-secure-encrypted-form-admin.php:363
 msgid "Complete this field with the email address that will get the secure email."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:373
+#: admin/class-secure-encrypted-form-admin.php:368
 msgid "OpenPGP Public key"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:377
+#: admin/class-secure-encrypted-form-admin.php:372
 msgid "Complete this field with your OpenPGP public key."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:382
+#: admin/class-secure-encrypted-form-admin.php:377
 msgid "Diagnostic log"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:386
+#: admin/class-secure-encrypted-form-admin.php:381
 msgid "Log files are stored in a protected folder inside your uploads directory and never contain the message, the email addresses or the subject. Keep this on \"errors only\" unless you are diagnosing a problem."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:391
+#: admin/class-secure-encrypted-form-admin.php:386
 msgid "Spam protection"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:398
+#: admin/class-secure-encrypted-form-admin.php:393
 msgid "Cloudflare Turnstile"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:402
+#: admin/class-secure-encrypted-form-admin.php:397
 msgid "Add a Cloudflare Turnstile challenge to the public form. Both keys below are required."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:407
+#: admin/class-secure-encrypted-form-admin.php:402
 msgid "Turnstile site key"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:411
+#: admin/class-secure-encrypted-form-admin.php:406
 msgid "The public key Cloudflare gives you for this website."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:416
+#: admin/class-secure-encrypted-form-admin.php:411
 msgid "Turnstile secret key"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:420
+#: admin/class-secure-encrypted-form-admin.php:415
 msgid "The private key, only ever sent from your server to Cloudflare."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:462
+#: admin/class-secure-encrypted-form-admin.php:457
 msgid "Cloudflare Turnstile needs both the site key and the secret key, so it has been left disabled."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:477
+#: admin/class-secure-encrypted-form-admin.php:472
 msgid "Enter your settings below"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:519
+#: admin/class-secure-encrypted-form-admin.php:514
 msgid "Disabled"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:520
+#: admin/class-secure-encrypted-form-admin.php:515
 msgid "Errors only (recommended)"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:521
+#: admin/class-secure-encrypted-form-admin.php:516
 msgid "Full log, including successful deliveries"
 msgstr ""
 
 #. translators: %1$s and %2$s are HTML a tags, please do not translate this parameter.
-#: admin/class-secure-encrypted-form-admin.php:553
+#: admin/class-secure-encrypted-form-admin.php:548
 #, php-format
 msgid "Optional. %1$sCloudflare Turnstile%2$s asks visitors to pass a check before the form is sent, without the puzzles of a traditional captcha. Leave it off if you do not need it."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:558
+#: admin/class-secure-encrypted-form-admin.php:553
 msgid "The message is always encrypted in the browser before anything is sent, with or without Turnstile. Your visitors' IP addresses are never sent to Cloudflare. If Cloudflare cannot be reached, messages are let through and the problem is written to the diagnostic log, so a Cloudflare outage never costs you a legitimate message."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:573
+#: admin/class-secure-encrypted-form-admin.php:568
 msgid "Enable Cloudflare Turnstile on the public form"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:625
+#: admin/class-secure-encrypted-form-admin.php:620
 msgid "Error: you are not allowed to send test emails."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:648
+#: admin/class-secure-encrypted-form-admin.php:643
 msgid "Secure message [test]"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:651
+#: admin/class-secure-encrypted-form-admin.php:646
 #: public/class-secure-encrypted-form-public.php:243
 msgid "From:"
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:653
+#: admin/class-secure-encrypted-form-admin.php:648
 #: public/class-secure-encrypted-form-public.php:245
 msgid "Please find the message attached."
 msgstr ""
 
 #. translators: %1$s is the plugin name and %2$s is the plugin version
-#: admin/class-secure-encrypted-form-admin.php:657
+#: admin/class-secure-encrypted-form-admin.php:652
 #: public/class-secure-encrypted-form-public.php:249
 #, php-format
 msgid "Sent with %1$s for WordPress v%2$s"
 msgstr ""
 
-#. translators: %1$s and %2$s are HTML a tags
-#: admin/class-secure-encrypted-form-admin.php:666
-#: public/class-secure-encrypted-form-public.php:258
-#, php-format
-msgid "%1$sIf you find this piece of software usefull please consider %2$sdonating to the author%3$s."
-msgstr ""
-
-#: admin/class-secure-encrypted-form-admin.php:710
+#: admin/class-secure-encrypted-form-admin.php:695
 msgid "Success: secure encrypted message [test] sent."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:720
+#: admin/class-secure-encrypted-form-admin.php:705
 msgid "Error E3: secure encrypted message could not be sent, see debug log please."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:728
+#: admin/class-secure-encrypted-form-admin.php:713
 msgid "Error E6: secure encrypted message could not be sent, seems that you are sending emails with PHP mail() function and is disabled by your webhost."
 msgstr ""
 
-#: admin/class-secure-encrypted-form-admin.php:765
+#: admin/class-secure-encrypted-form-admin.php:750
 msgid "It seems that PHP mail() function is disabled on your server. Please contact your hosting provider or use a SMTP plugin."
 msgstr ""
 
@@ -372,11 +361,11 @@ msgstr ""
 msgid "Secure message:"
 msgstr ""
 
-#: public/class-secure-encrypted-form-public.php:302
+#: public/class-secure-encrypted-form-public.php:292
 msgid "Success: secure encrypted message sent."
 msgstr ""
 
-#: public/class-secure-encrypted-form-public.php:312
-#: public/class-secure-encrypted-form-public.php:320
+#: public/class-secure-encrypted-form-public.php:302
+#: public/class-secure-encrypted-form-public.php:310
 msgid "Error: secure encrypted message could not be sent, please contact website owner."
 msgstr ""

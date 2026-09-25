@@ -1,6 +1,5 @@
 === Secure Encrypted Form ===
 Contributors: danidub
-Donate link: https://charrua.es/donaciones/
 Tags: contact form, encryption, openpgp, secure form, privacy
 Requires at least: 5.3
 Tested up to: 7.1
@@ -83,10 +82,6 @@ One of the best ways of generating your PGP key pair is using a computer witout 
 When you cannot find the answer to your question on the FAQ section, check the [support forum](https://wordpress.org/support/plugin/secure-encrypted-form/) on WordPress.org. If you cannot locate any topics that solve to your particular issue, post a new topic for it.
 Remember this support is offered for free and can take some hours/days to answer and solve your issues.
 
-= Secure Contact Form needs your support =
-
-It is hard to continue development and support for this free plugin without contributions from users like you. **If you enjoy using Secure Contact Form and find it useful, please consider [making a donation](https://charrua.es/donaciones/)**. Your donation will help encourage and support the plugin's continued development and better user support.
-
 = Spam protection (optional) =
 
 The plugin can add a [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) challenge to the form. It is **disabled by default** and does nothing until you enable it and enter your site key and secret key in the plugin settings.
@@ -152,6 +147,7 @@ Your server may be restricted or disabled to send emails. In that case you can u
 == Changelog ==
 
 = 1.3.0 =
+* Removed the donation panel, links and email footer. The donation page no longer exists.
 * Added a "Delete all log files" button to the Debug log screen. Useful if you are upgrading from a version before 1.2.0, whose logs recorded the email addresses and subject of every message.
 * The plugin now warns you when your site is not served over HTTPS. Browsers only allow encryption on secure connections, so on an HTTP site no message can be sent, and until now the only symptom was an error blaming your encryption key.
 * The test email form now shows the underlying error instead of always reporting a problem with the public key.

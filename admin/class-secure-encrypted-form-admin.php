@@ -223,13 +223,8 @@ class Secure_Encrypted_Form_Admin {
 
 		$settings_link = '<a href="' . $settings_url . '">' . __( 'Settings', 'secure-encrypted-form' ) . '</a>';
 
-		$donations_url = esc_url( 'https://charrua.es/donaciones/' );
-
-		$donations_link = '<a href="' . $donations_url . '" target="_blank" rel="noopener noreferrer"><strong style="color: #11967A; display: inline;">' . __( 'Donate', 'secure-encrypted-form' ) . '</strong></a>';
-
 		array_unshift(
 			$actions,
-			$donations_link,
 			$settings_link
 		);
 
@@ -660,16 +655,6 @@ class Secure_Encrypted_Form_Admin {
 			),
 			esc_html( $this->plugin_name ),
 			esc_html( $this->version )
-		);
-		$body .= sprintf(
-			/* translators: %1$s and %2$s are HTML a tags */
-			esc_html__(
-				'%1$sIf you find this piece of software usefull please consider %2$sdonating to the author%3$s.',
-				'secure-encrypted-form'
-			),
-			'<br>',
-			'<a href="' . esc_url( 'https://charrua.es/donaciones' ) . '">',
-			'</a>'
 		);
 
 		// Create file, rename it ans use it as attachment.

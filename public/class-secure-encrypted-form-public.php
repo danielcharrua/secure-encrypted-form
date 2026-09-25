@@ -253,16 +253,6 @@ class Secure_Encrypted_Form_Public {
 				esc_html( $this->plugin_name ),
 				esc_html( $this->version )
 			);
-			$body .= sprintf(
-				/* translators: %1$s and %2$s are HTML a tags */
-				esc_html__(
-					'%1$sIf you find this piece of software usefull please consider %2$sdonating to the author%3$s.',
-					'secure-encrypted-form'
-				),
-				'<br>',
-				'<a href="' . esc_url( 'https://charrua.es/donaciones' ) . '">',
-				'</a>'
-			);
 
 			// Create file, rename it ans use it as attachment.
 			$temp_file = wp_tempnam( 'secure-message' );
