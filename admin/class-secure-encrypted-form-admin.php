@@ -684,7 +684,7 @@ class Secure_Encrypted_Form_Admin {
 			if ( false !== strpos( $e->getMessage(), 'Call to undefined function PHPMailer\PHPMailer\mail()' ) ) {
 				$sent = 'php_mail_fail';
 			} else {
-				$this->logger->error( 'wp_mail threw an exception: ', array( 'error' => $e->getMessage() ) );
+				$this->logger->error( 'wp_mail threw an exception:', array( 'error' => $e->getMessage() ) );
 			}
 		}
 
@@ -735,7 +735,7 @@ class Secure_Encrypted_Form_Admin {
 	public function debug_wp_mail_failure( $wp_error ) {
 		$this->logger->error( 'Secure email [test] not sent.' );
 		$this->logger->error( 'Internal error code E3' );
-		$this->logger->error( 'wp_mail: ', array( 'error' => $wp_error->get_error_message() ) );
+		$this->logger->error( 'wp_mail:', array( 'error' => $wp_error->get_error_message() ) );
 	}
 
 	/**

@@ -197,7 +197,7 @@ class Secure_Encrypted_Form_Turnstile {
 
 		if ( is_wp_error( $response ) ) {
 			$this->logger->error(
-				'Turnstile could not be reached, letting the submission through: ',
+				'Turnstile could not be reached, letting the submission through:',
 				array( 'error' => $response->get_error_message() )
 			);
 
@@ -208,7 +208,7 @@ class Secure_Encrypted_Form_Turnstile {
 
 		if ( 200 !== (int) $code ) {
 			$this->logger->error(
-				'Turnstile answered an unexpected status, letting the submission through: ',
+				'Turnstile answered an unexpected status, letting the submission through:',
 				array( 'status' => $code )
 			);
 
@@ -233,14 +233,14 @@ class Secure_Encrypted_Form_Turnstile {
 		// is treated like an outage instead of blocking every message.
 		if ( false !== strpos( $codes, 'invalid-input-secret' ) || false !== strpos( $codes, 'missing-input-secret' ) ) {
 			$this->logger->error(
-				'Turnstile rejected the secret key, check the plugin settings. Letting the submission through: ',
+				'Turnstile rejected the secret key, check the plugin settings. Letting the submission through:',
 				array( 'codes' => $codes )
 			);
 
 			return true;
 		}
 
-		$this->logger->debug( 'Turnstile rejected a submission: ', array( 'codes' => $codes ) );
+		$this->logger->debug( 'Turnstile rejected a submission:', array( 'codes' => $codes ) );
 
 		return false;
 	}

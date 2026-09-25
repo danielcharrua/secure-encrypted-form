@@ -408,8 +408,9 @@ class Secure_Encrypted_Form_Logger {
 		// we now change the default output format according to our needs.
 		$output = "[%datetime%] %level_name%: %message% %context%\n";
 
-		// finally, create a formatter.
-		$formatter = new LineFormatter( $output, $date_format );
+		// finally, create a formatter. The last argument drops the empty "[]" that
+		// would otherwise trail every entry logged without context.
+		$formatter = new LineFormatter( $output, $date_format, false, true );
 
 		// Create a handler.
 		$rotating_file = new RotatingFileHandler( $path . '/log.log', 7 );
