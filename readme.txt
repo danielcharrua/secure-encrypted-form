@@ -184,7 +184,7 @@ Your server may be restricted or disabled to send emails. In that case you can u
 * Your visitors' IP addresses are never sent to Cloudflare.
 
 = 1.2.0 =
-* Security: log files are no longer written to a predictable, publicly reachable path inside the uploads folder. The log directory now carries a random suffix and ships with server rules that block direct web access. Existing logs are moved to the protected location automatically. Reported by @rayeason, thank you.
+* Security: log files are no longer written to a predictable, publicly reachable path inside the uploads folder. The log directory now carries a random suffix and ships with server rules that block direct web access. Existing logs are moved to the protected location automatically. Reported by @rayeason.
 * Security: the diagnostic log no longer records the sender email address or the message subject.
 * Security: hardened the log viewer so it can only open the plugin's own log files.
 * Added a "Diagnostic log" setting with three levels: disabled, errors only (the default) and full log. The log folder is only created when there is something to write.
