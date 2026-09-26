@@ -98,6 +98,14 @@ There are many ways to generate the key, each have a different impact on securit
 When you cannot find the answer to your question on the FAQ section, check the [support forum](https://wordpress.org/support/plugin/secure-encrypted-form/) on WordPress.org. If you cannot locate any topics that solve to your particular issue, post a new topic for it.
 Remember this support is offered for free and can take some hours/days to answer and solve your issues.
 
+= Supporting the plugin =
+
+This plugin is free and stays free. It is maintained in the time left over from paid work, which is the honest reason why some things take a while.
+
+If your organisation needs something it does not do yet, a custom field, an integration with your own systems, or a hand setting up your key pair and the form, that work can be commissioned at [charrua.es](https://charrua.es/). Paying for a feature is what funds the hours behind the plugin, and whenever a change makes sense for everyone it goes into the free version too, so the work ends up in the hands of people who could never have paid for it.
+
+That is the arrangement we like: those who can afford it pay for the tools that everyone else gets to use.
+
 = Spam protection (optional) =
 
 The plugin can add a [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) challenge to the form. It is **disabled by default** and does nothing until you enable it and enter your site key and secret key in the plugin settings.
@@ -165,6 +173,7 @@ Your server may be restricted or disabled to send emails. In that case you can u
 == Changelog ==
 
 = 1.3.0 =
+* Added a note on how to support the plugin: commissioning custom work is what funds it, and changes that make sense for everyone land in the free version.
 * Rewrote parts of the plugin description: why a private channel matters, and an honest list of what the plugin does not protect.
 * Removed the donation panel, links and email footer. The donation page no longer exists.
 * Added a "Delete all log files" button to the Debug log screen. Useful if you are upgrading from a version before 1.2.0, whose logs recorded the email addresses and subject of every message.
