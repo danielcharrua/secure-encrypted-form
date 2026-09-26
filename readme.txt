@@ -98,6 +98,12 @@ There are many ways to generate the key, each have a different impact on securit
 When you cannot find the answer to your question on the FAQ section, check the [support forum](https://wordpress.org/support/plugin/secure-encrypted-form/) on WordPress.org. If you cannot locate any topics that solve to your particular issue, post a new topic for it.
 Remember this support is offered for free and can take some hours/days to answer and solve your issues.
 
+= Thanks =
+
+Some of the best changes in this plugin did not start here. The logs were moved out of a publicly reachable folder because **@rayeason** took the time to report it instead of simply uninstalling, and Cloudflare Turnstile was added because **Eric** asked for a way to keep spam out.
+
+If you spot something wrong, or something missing, say so in the [support forum](https://wordpress.org/support/plugin/secure-encrypted-form/). A plugin that handles sensitive messages gets better when people look at it closely.
+
 = Supporting the plugin =
 
 This plugin is free and stays free. It is maintained in the time left over from paid work, which is the honest reason why some things take a while.
@@ -179,12 +185,12 @@ Your server may be restricted or disabled to send emails. In that case you can u
 * Added a "Delete all log files" button to the Debug log screen. Useful if you are upgrading from a version before 1.2.0, whose logs recorded the email addresses and subject of every message.
 * The plugin now warns you when your site is not served over HTTPS. Browsers only allow encryption on secure connections, so on an HTTP site no message can be sent, and until now the only symptom was an error blaming your encryption key.
 * The test email form now shows the underlying error instead of always reporting a problem with the public key.
-* Added optional spam protection with Cloudflare Turnstile. It is disabled by default and needs both the site key and the secret key to switch on, so nothing changes unless you enable it.
+* Added optional spam protection with Cloudflare Turnstile, suggested by Eric. It is disabled by default and needs both the site key and the secret key to switch on, so nothing changes unless you enable it.
 * If Cloudflare cannot be reached, or your secret key is wrong, messages are allowed through and the problem is written to the diagnostic log. A Cloudflare outage never costs you a legitimate message.
 * Your visitors' IP addresses are never sent to Cloudflare.
 
 = 1.2.0 =
-* Security: log files are no longer written to a predictable, publicly reachable path inside the uploads folder. The log directory now carries a random suffix and ships with server rules that block direct web access. Existing logs are moved to the protected location automatically. Reported by a plugin user, thank you.
+* Security: log files are no longer written to a predictable, publicly reachable path inside the uploads folder. The log directory now carries a random suffix and ships with server rules that block direct web access. Existing logs are moved to the protected location automatically. Reported by @rayeason, thank you.
 * Security: the diagnostic log no longer records the sender email address or the message subject.
 * Security: hardened the log viewer so it can only open the plugin's own log files.
 * Added a "Diagnostic log" setting with three levels: disabled, errors only (the default) and full log. The log folder is only created when there is something to write.
