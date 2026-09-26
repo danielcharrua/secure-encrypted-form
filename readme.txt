@@ -98,12 +98,6 @@ There are many ways to generate the key, each have a different impact on securit
 When you cannot find the answer to your question on the FAQ section, check the [support forum](https://wordpress.org/support/plugin/secure-encrypted-form/) on WordPress.org. If you cannot locate any topics that solve to your particular issue, post a new topic for it.
 Remember this support is offered for free and can take some hours/days to answer and solve your issues.
 
-= Thanks =
-
-Some of the best changes in this plugin did not start here. The logs were moved out of a publicly reachable folder because **@rayeason** took the time to report it instead of simply uninstalling, and Cloudflare Turnstile was added because **Eric** asked for a way to keep spam out.
-
-If you spot something wrong, or something missing, say so in the [support forum](https://wordpress.org/support/plugin/secure-encrypted-form/). A plugin that handles sensitive messages gets better when people look at it closely.
-
 = Supporting the plugin =
 
 This plugin is free and stays free. It is maintained in the time left over from paid work, which is the honest reason why some things take a while.
