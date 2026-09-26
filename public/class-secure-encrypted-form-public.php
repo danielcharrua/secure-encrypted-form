@@ -105,8 +105,10 @@ class Secure_Encrypted_Form_Public {
 		 */
 
 		if ( Secure_Encrypted_Form_Turnstile::is_enabled() ) {
+			Secure_Encrypted_Form_Turnstile::exclude_from_optimizers();
+
 			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Cloudflare versions this URL itself, appending ours would be wrong.
-			wp_enqueue_script( 'cloudflare-turnstile', Secure_Encrypted_Form_Turnstile::SCRIPT_URL, array(), null, true );
+			wp_enqueue_script( Secure_Encrypted_Form_Turnstile::SCRIPT_HANDLE, Secure_Encrypted_Form_Turnstile::SCRIPT_URL, array(), null, true );
 		}
 
 		wp_enqueue_script( 'openpgpjs', plugin_dir_url( __DIR__ ) . 'lib/js/openpgp.min.js', array(), '6.3.0', true );

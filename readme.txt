@@ -153,6 +153,16 @@ You will find **Secure Encrypted Form** menu in your WordPress admin screen. Onc
 
 The plugin has built in support for Cloudflare Turnstile. Create a free Turnstile site in your Cloudflare dashboard, then enable it in the plugin settings and paste the site key and the secret key. It is off by default.
 
+= The Turnstile widget does not appear, and the form says the spam check could not be completed =
+
+This is almost always a caching or optimisation plugin combining, minifying or deferring the Cloudflare script. Turnstile needs its own script tag to start, so when it is merged into a bundle the widget never renders, no token is produced, and the form rejects the submission. The browser console usually shows "Could not find Turnstile valid script tag".
+
+The plugin already asks SiteGround Speed Optimizer, LiteSpeed Cache, WP Rocket and Autoptimize to leave that script alone, and marks it in the page so other optimisers skip it too. If yours does not honour that, exclude this script by hand:
+
+`https://challenges.cloudflare.com/turnstile/v0/api.js`
+
+It is registered under the handle `cloudflare-turnstile`, which is what some plugins ask for instead of the URL. Exclude it from combining, from minifying and from deferring, then clear every cache.
+
 = I get an error about my encryption key, but the key is fine =
 
 Check that your site is served over HTTPS. Browsers only give access to the encryption API on secure connections, so on an HTTP site the form cannot encrypt anything. From version 1.3.0 the plugin tells you this directly, both in the admin and in the form.
@@ -176,6 +186,7 @@ Your server may be restricted or disabled to send emails. In that case you can u
 * Added a note on how to support the plugin: commissioning custom work is what funds it, and changes that make sense for everyone land in the free version.
 * Rewrote parts of the plugin description: why a private channel matters, and an honest list of what the plugin does not protect.
 * Removed the donation panel, links and email footer. The donation page no longer exists.
+* The Cloudflare Turnstile script is now excluded from the optimisations of SiteGround Speed Optimizer, LiteSpeed Cache, WP Rocket and Autoptimize, and marked so other optimisers skip it. Combining or deferring that script stops the widget from appearing and makes the form reject every submission.
 * Added a "Delete all log files" button to the Debug log screen. Useful if you are upgrading from a version before 1.2.0, whose logs recorded the email addresses and subject of every message.
 * The plugin now warns you when your site is not served over HTTPS. Browsers only allow encryption on secure connections, so on an HTTP site no message can be sent, and until now the only symptom was an error blaming your encryption key.
 * The test email form now shows the underlying error instead of always reporting a problem with the public key.

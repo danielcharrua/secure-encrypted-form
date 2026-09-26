@@ -61,6 +61,14 @@ class Secure_Encrypted_Form_Turnstile {
 	const TOKEN_FIELD = 'cf-turnstile-response';
 
 	/**
+	 * The handle the widget script is registered under.
+	 *
+	 * @since    1.3.0
+	 * @var      string
+	 */
+	const SCRIPT_HANDLE = 'cloudflare-turnstile';
+
+	/**
 	 * The logger.
 	 *
 	 * @since    1.3.0
@@ -157,6 +165,107 @@ class Secure_Encrypted_Form_Turnstile {
 			'<div class="form-group"><div class="cf-turnstile" data-sitekey="%s" data-retry="auto"></div></div>',
 			esc_attr( self::get_site_key() )
 		);
+	}
+
+	/**
+	 * Ask the common optimisation plugins to leave the widget script alone.
+	 *
+	 * Turnstile looks for its own script tag in the page to read its
+	 * configuration. Caching plugins that combine, minify or defer scripts break
+	 * that: the tag disappears into a bundle, the widget never renders, and the
+	 * form then refuses every submission for want of a token. The symptom looks
+	 * like a plugin bug, so it is worth preventing rather than documenting.
+	 *
+	 * Both routes are used, because they cover different plugins: markup
+	 * attributes, which several optimisers honour, and the exclusion filters the
+	 * rest provide.
+	 *
+	 * @since    1.3.0
+	 */
+	public static function exclude_from_optimizers() {
+
+		add_filter( 'script_loader_tag', array( __CLASS__, 'add_optimizer_attributes' ), 10, 2 );
+
+		// SiteGround Speed Optimizer.
+		add_filter( 'sgo_javascript_combine_exclude', array( __CLASS__, 'add_handle_to_list' ) );
+		add_filter( 'sgo_js_minify_exclude', array( __CLASS__, 'add_handle_to_list' ) );
+		add_filter( 'sgo_js_async_exclude', array( __CLASS__, 'add_handle_to_list' ) );
+		add_filter( 'sgo_javascript_combine_excluded_external_paths', array( __CLASS__, 'add_url_to_list' ) );
+
+		// LiteSpeed Cache.
+		add_filter( 'litespeed_optimize_js_excludes', array( __CLASS__, 'add_url_to_list' ) );
+
+		// WP Rocket.
+		add_filter( 'rocket_exclude_js', array( __CLASS__, 'add_url_to_list' ) );
+		add_filter( 'rocket_delay_js_exclusions', array( __CLASS__, 'add_url_to_list' ) );
+
+		// Autoptimize, which takes a comma separated string instead of a list.
+		add_filter( 'autoptimize_filter_js_exclude', array( __CLASS__, 'add_url_to_string_list' ) );
+	}
+
+	/**
+	 * Mark the widget script so optimisers that read markup skip it.
+	 *
+	 * @since    1.3.0
+	 * @param    string $tag       The script tag.
+	 * @param    string $handle    The script handle.
+	 * @return   string            The tag, marked when it is the widget script.
+	 */
+	public static function add_optimizer_attributes( $tag, $handle ) {
+
+		if ( self::SCRIPT_HANDLE !== $handle ) {
+			return $tag;
+		}
+
+		return str_replace(
+			'<script ',
+			'<script data-no-optimize="1" data-no-defer="1" data-no-minify="1" data-noptimize="1" data-cfasync="false" ',
+			$tag
+		);
+	}
+
+	/**
+	 * Add the widget script handle to an exclusion list.
+	 *
+	 * @since    1.3.0
+	 * @param    mixed $excluded    The list an optimiser passes in.
+	 * @return   array              The list with the handle added.
+	 */
+	public static function add_handle_to_list( $excluded ) {
+
+		$excluded   = is_array( $excluded ) ? $excluded : array();
+		$excluded[] = self::SCRIPT_HANDLE;
+
+		return $excluded;
+	}
+
+	/**
+	 * Add the widget script URL to an exclusion list.
+	 *
+	 * @since    1.3.0
+	 * @param    mixed $excluded    The list an optimiser passes in.
+	 * @return   array              The list with the URL added.
+	 */
+	public static function add_url_to_list( $excluded ) {
+
+		$excluded   = is_array( $excluded ) ? $excluded : array();
+		$excluded[] = self::SCRIPT_URL;
+
+		return $excluded;
+	}
+
+	/**
+	 * Add the widget script URL to a comma separated exclusion list.
+	 *
+	 * @since    1.3.0
+	 * @param    mixed $excluded    The string an optimiser passes in.
+	 * @return   string             The string with the URL added.
+	 */
+	public static function add_url_to_string_list( $excluded ) {
+
+		$excluded = is_string( $excluded ) ? $excluded : '';
+
+		return '' === $excluded ? self::SCRIPT_URL : $excluded . ',' . self::SCRIPT_URL;
 	}
 
 	/**
