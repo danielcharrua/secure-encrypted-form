@@ -60,6 +60,25 @@ You will only be able to decrypt the content of the attached file if you have th
 * Receive secret messages
 * Receiving passwords from clients or friends
 * Reception of sensitive information
+* Offering a private channel to sources, whistleblowers or people asking for help
+
+= Why private communication matters =
+
+Some messages cannot travel through an ordinary contact form. A source writing to a journalist, an employee reporting wrongdoing inside their own company, a lawyer receiving documents from a client, someone asking for help where asking is itself dangerous: for all of them, whether the channel is private is not a detail, it is the entire point.
+
+A normal contact form sends the message in plain text to the web server, where it is kept in the database, in mail logs and in whatever backups the hosting provider takes. Every one of those copies is a place where it can be read, demanded or leaked. This plugin encrypts the message in the visitor's browser, so what reaches the server is already unreadable to everyone, including you until you decrypt it with your private key, and including your hosting provider.
+
+The Universal Declaration of Human Rights protects both freedom of expression and privacy of correspondence, and the two hold each other up: people only speak freely when they can choose who is listening. Giving your readers a channel that does not betray them is a small, practical way of defending that.
+
+= What this plugin does not do =
+
+Encrypting the message is one piece of a larger picture, and it is only honest to say where the picture ends.
+
+* The name, email and subject fields are **not** encrypted. Only the message is. Anyone who can read your server can see who wrote and what the subject was.
+* The plugin does not hide the fact that someone visited your website.
+* It cannot protect a message once you have decrypted it on your own computer.
+
+If someone's safety depends on this channel, the way they reach your site and the way you store what you receive matter just as much as the encryption itself.
 
 = Requirements =
 
@@ -67,9 +86,6 @@ You will only be able to decrypt the content of the attached file if you have th
 
 In order to use this plugin you need to have or create a **PGP key pair**. If you don't have your key pair generated you can browse the internet on how to generate it.
 There are many ways to generate the key, each have a different impact on security.
-
-= TIP on generating PGP key pair =
-One of the best ways of generating your PGP key pair is using a computer witout Internet connection and using [Tails OS](https://tails.boum.org).
 
 = Recommended software =
 
@@ -149,6 +165,7 @@ Your server may be restricted or disabled to send emails. In that case you can u
 == Changelog ==
 
 = 1.3.0 =
+* Rewrote parts of the plugin description: why a private channel matters, and an honest list of what the plugin does not protect.
 * Removed the donation panel, links and email footer. The donation page no longer exists.
 * Added a "Delete all log files" button to the Debug log screen. Useful if you are upgrading from a version before 1.2.0, whose logs recorded the email addresses and subject of every message.
 * The plugin now warns you when your site is not served over HTTPS. Browsers only allow encryption on secure connections, so on an HTTP site no message can be sent, and until now the only symptom was an error blaming your encryption key.
