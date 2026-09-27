@@ -9,9 +9,35 @@
         }
     ],
     "config": {
-		"vendor-dir": "lib/vendor"
+		"vendor-dir": "lib/vendor",
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
 	},
     "require": {
         "monolog/monolog": "^2.8"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.13",
+        "wp-coding-standards/wpcs": "^3.4",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.2"
+    },
+    "scripts": {
+        "lint": "phpcs",
+        "lint:fix": "phpcbf",
+        "test:crypto": "node --test 'tests/js/*.test.mjs'",
+        "test:turnstile": "php tests/php/turnstile-test.php",
+        "test": [
+            "@lint",
+            "@test:crypto",
+            "@test:turnstile"
+        ]
+    },
+    "scripts-descriptions": {
+        "lint": "Check the code against the WordPress coding standards.",
+        "lint:fix": "Fix automatically solvable coding standard violations.",
+        "test:crypto": "Run the OpenPGP encryption and decryption tests.",
+        "test:turnstile": "Run the Turnstile verification tests.",
+        "test": "Run every check that does not need a WordPress installation."
     }
 }

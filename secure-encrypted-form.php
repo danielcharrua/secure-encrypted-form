@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The plugin bootstrap file
  *
@@ -15,7 +14,7 @@
  * @wordpress-plugin
  * Plugin Name:       Secure Encrypted Form
  * Description:       Display a form on any page or post and receive secure (encrypted) communications using OpenPGP.
- * Version:           1.1.0
+ * Version:           1.3.0
  * Author:            Daniel Pereyra Costas
  * Author URI:        https://charrua.es
  * License:           GPL-2.0+
@@ -34,7 +33,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'SECURE_ENCRYPTED_FORM_VERSION', '1.1.0' );
+define( 'SECURE_ENCRYPTED_FORM_VERSION', '1.3.0' );
 
 /**
  * Require composer and packages
@@ -45,7 +44,7 @@ require plugin_dir_path( __FILE__ ) . 'lib/vendor/autoload.php';
  * The code that runs during plugin activation.
  * This action is documented in includes/class-secure-encrypted-form-activator.php
  */
-function activate_secure_encrypted_form() {
+function secure_encrypted_form_activate() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-secure-encrypted-form-activator.php';
 	Secure_Encrypted_Form_Activator::activate();
 	Secure_Encrypted_Form_Activator::define_plugin_options();
@@ -55,13 +54,13 @@ function activate_secure_encrypted_form() {
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-secure-encrypted-form-deactivator.php
  */
-function deactivate_secure_encrypted_form() {
+function secure_encrypted_form_deactivate() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-secure-encrypted-form-deactivator.php';
 	Secure_Encrypted_Form_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_secure_encrypted_form' );
-register_deactivation_hook( __FILE__, 'deactivate_secure_encrypted_form' );
+register_activation_hook( __FILE__, 'secure_encrypted_form_activate' );
+register_deactivation_hook( __FILE__, 'secure_encrypted_form_deactivate' );
 
 /**
  * The core plugin class that is used to define internationalization,
@@ -78,10 +77,9 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-secure-encrypted-form.php'
  *
  * @since    1.0.0
  */
-function run_secure_encrypted_form() {
+function secure_encrypted_form_run() {
 
 	$plugin = new Secure_Encrypted_Form();
 	$plugin->run();
-
 }
-run_secure_encrypted_form();
+secure_encrypted_form_run();

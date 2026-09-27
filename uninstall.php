@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Fired when the plugin is uninstalled.
  *
@@ -30,4 +29,11 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-secure-encrypted-form-logger.php';
+
+// Remove the log files before forgetting where they are stored.
+Secure_Encrypted_Form_Logger::delete_logs();
+
 delete_option( 'secure_encrypted_form_option_name' );
+delete_option( Secure_Encrypted_Form_Logger::DIRNAME_OPTION );
+delete_option( Secure_Encrypted_Form_Logger::MIGRATED_OPTION );

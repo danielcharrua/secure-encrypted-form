@@ -12,6 +12,17 @@
 			$( '.form-group' ).removeClass( 'has-error' );
 			$( '.help-block' ).remove();
 
+			// Browsers only expose WebCrypto in a secure context, and OpenPGP.js
+			// refuses to run without it. Checking here keeps the failure honest:
+			// otherwise it surfaces as an error blaming the encryption key.
+			if ( ! window.isSecureContext ) {
+				$( '.secure-form' ).append(
+					'<div class="alert alert-danger">' + data.errorNoSecureCtx + '</div>'
+				);
+
+				return;
+			}
+
 			// Disable form
 			$( '.secure-form :input' ).prop( 'disabled', true );
 			$( '.secure-form' ).append( '<div class="spinner-wrapper"><span class="spinner"></span></div>' );
@@ -23,10 +34,12 @@
 				publicKey = await openpgp.readKey( { armoredKey: data.publicKeyArmored } );
 			} catch (error) {
 				// Give failed feedback to user
-				$( '.secure-form' ).append( 
+				$( '.secure-form' ).append(
 					'<div class="alert alert-danger">' + data.errorOnKey + '</div>'
 				);
 
+				// Enable form
+				$( '.secure-form :input' ).prop( 'disabled', false );
 				$( '.spinner-wrapper' ).remove();
 
 				return;
@@ -35,11 +48,32 @@
 
 			let message = $( '#message' ).val();
 
-			const encrypted = await openpgp.encrypt({
-				message: await openpgp.createMessage( { text: message } ),
-				encryptionKeys: publicKey,
-				//signingKeys: privateKey
-			});
+			// An expired key parses fine but fails here, so encryption needs its
+			// own feedback: without it the form stays disabled with no message.
+			let encrypted;
+
+			try {
+				encrypted = await openpgp.encrypt({
+					message: await openpgp.createMessage( { text: message } ),
+					encryptionKeys: publicKey,
+					//signingKeys: privateKey
+				});
+			} catch (error) {
+				$( '.secure-form' ).append(
+					'<div class="alert alert-danger">' + data.errorOnEncrypt + '</div>'
+				);
+
+				// Enable form
+				$( '.secure-form :input' ).prop( 'disabled', false );
+				$( '.spinner-wrapper' ).remove();
+
+				// Delete alert message
+				setTimeout(function() {
+					$( '.secure-form .alert' ).remove();
+				}, 10000);
+
+				return;
+			}
 
 			let formData = {
 				action: 'send_secure_form',
@@ -49,6 +83,18 @@
 				messageLen: message.length,
 				message: JSON.stringify( encrypted ),
 				security: data.nonce,
+			};
+
+			// Turnstile tokens are single use and expire, so the widget has to be
+			// reset after every attempt or a second message would always fail.
+			if ( data.turnstileEnabled && 'undefined' !== typeof turnstile ) {
+				formData['cf-turnstile-response'] = turnstile.getResponse();
+			}
+
+			const resetTurnstile = function () {
+				if ( data.turnstileEnabled && 'undefined' !== typeof turnstile ) {
+					turnstile.reset();
+				}
 			};
 
 			$.ajax({
@@ -100,6 +146,7 @@
 						// Enable form
 						$( '.secure-form :input' ).prop( 'disabled', false );
 						$( '.spinner-wrapper' ).remove();
+						resetTurnstile();
 
 					} else {
 						$( '.secure-form' ).append( 
@@ -115,6 +162,7 @@
 						// Enable form
 						$( '.secure-form :input' ).prop( 'disabled', false );
 						$( '.spinner-wrapper' ).remove();
+						resetTurnstile();
 
 						// Delete alert message
 						setTimeout(function() { 
@@ -130,6 +178,7 @@
 					// Enable form
 					$( '.secure-form :input' ).prop( 'disabled', false );
 					$( '.spinner-wrapper' ).remove();
+					resetTurnstile();
 
 					// Delete alert message
 					setTimeout(function() { 

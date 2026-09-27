@@ -1,3 +1,4 @@
+.DS_Store
 /.wordpress-org
 /.git
 /.github
@@ -10,3 +11,12 @@
 build.sh
 composer.json
 composer.lock
+TODO.md
+README.md
+CLAUDE.md
+/.claude
+/tests
+/node_modules
+package.json
+package-lock.json
+phpcs.xml.dist

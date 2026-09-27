@@ -15,8 +15,7 @@
 /**
  * The core plugin class.
  *
- * This is used to define internationalization, admin-specific hooks, and
- * public-facing site hooks.
+ * This is used to define admin-specific hooks and public-facing site hooks.
  *
  * Also maintains the unique identifier of this plugin as well as the current
  * version of the plugin.
@@ -60,8 +59,8 @@ class Secure_Encrypted_Form {
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
-	 * Load the dependencies, define the locale, and set the hooks for the admin area and
-	 * the public-facing side of the site.
+	 * Load the dependencies and set the hooks for the admin area and the
+	 * public-facing side of the site.
 	 *
 	 * @since    1.0.0
 	 */
@@ -74,10 +73,8 @@ class Secure_Encrypted_Form {
 		$this->plugin_name = 'secure-encrypted-form';
 
 		$this->load_dependencies();
-		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
 	}
 
 	/**
@@ -86,7 +83,6 @@ class Secure_Encrypted_Form {
 	 * Include the following files that make up the plugin:
 	 *
 	 * - Secure_Encrypted_Form_Loader. Orchestrates the hooks of the plugin.
-	 * - Secure_Encrypted_Form_i18n. Defines internationalization functionality.
 	 * - Secure_Encrypted_Form_Admin. Defines all hooks for the admin area.
 	 * - Secure_Encrypted_Form_Public. Defines all hooks for the public side of the site.
 	 *
@@ -102,44 +98,30 @@ class Secure_Encrypted_Form {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-secure-encrypted-form-loader.php';
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-secure-encrypted-form-loader.php';
 
 		/**
-		 * The class responsible for defining internationalization functionality
-		 * of the plugin.
+		 * The class responsible for writing the plugin diagnostic log.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-secure-encrypted-form-i18n.php';
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-secure-encrypted-form-logger.php';
+
+		/**
+		 * The class responsible for the optional Turnstile spam protection.
+		 */
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-secure-encrypted-form-turnstile.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-secure-encrypted-form-admin.php';
+		require_once plugin_dir_path( __DIR__ ) . 'admin/class-secure-encrypted-form-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-secure-encrypted-form-public.php';
+		require_once plugin_dir_path( __DIR__ ) . 'public/class-secure-encrypted-form-public.php';
 
 		$this->loader = new Secure_Encrypted_Form_Loader();
-
-	}
-
-	/**
-	 * Define the locale for this plugin for internationalization.
-	 *
-	 * Uses the Secure_Encrypted_Form_i18n class in order to set the domain and to register the hook
-	 * with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function set_locale() {
-
-		$plugin_i18n = new Secure_Encrypted_Form_i18n();
-
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
 	}
 
 	/**
@@ -157,15 +139,16 @@ class Secure_Encrypted_Form {
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_admin_settings_page' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'secure_encrypted_form_page_init' );
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'show_incomplete_settings_notice' );
+		$this->loader->add_action( 'admin_notices', $plugin_admin, 'show_insecure_context_notice' );
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'maybe_migrate_logs' );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
 		// The wp_ajax_ is telling WordPress to use ajax and send_secure_form is the hook name to use in JavaScript.
-		// Handle backend secure test form.
+		// Handle backend secure test form. It is deliberately not registered for
+		// logged out users: only administrators may send test emails.
 		$this->loader->add_action( 'wp_ajax_send_secure_test_form', $plugin_admin, 'send_secure_test_form' );
-		$this->loader->add_action( 'wp_ajax_nopriv_send_secure_test_form', $plugin_admin, 'send_secure_test_form' );
-
 	}
 
 	/**
@@ -195,7 +178,6 @@ class Secure_Encrypted_Form {
 		// Handle fontend secure form.
 		$this->loader->add_action( 'wp_ajax_send_secure_form', $plugin_public, 'send_secure_form' );
 		$this->loader->add_action( 'wp_ajax_nopriv_send_secure_form', $plugin_public, 'send_secure_form' );
-
 	}
 
 	/**
@@ -209,7 +191,7 @@ class Secure_Encrypted_Form {
 
 	/**
 	 * The name of the plugin used to uniquely identify it within the context of
-	 * WordPress and to define internationalization functionality.
+	 * WordPress.
 	 *
 	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
@@ -237,5 +219,4 @@ class Secure_Encrypted_Form {
 	public function get_version() {
 		return $this->version;
 	}
-
 }

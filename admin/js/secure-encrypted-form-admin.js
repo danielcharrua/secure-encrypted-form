@@ -8,6 +8,17 @@
 			// This return prevents the submit event to refresh the page.
 			event.preventDefault();
 
+			// Browsers only expose WebCrypto in a secure context, and OpenPGP.js
+			// refuses to run without it. Checking here keeps the failure honest:
+			// otherwise it surfaces as an error blaming the public key.
+			if ( ! window.isSecureContext ) {
+				$( '#secure-form-test' ).append(
+					'<div class="alert alert-danger">' + data.errorNoSecureCtx + '</div>'
+				);
+
+				return;
+			}
+
 			// Disable form
 			$( '#secure-form-test :input' ).prop( 'disabled', true );
 			$( '#secure-form-test .spinner' ).addClass( 'is-active' );
@@ -19,11 +30,15 @@
 				publicKey = await openpgp.readKey( { armoredKey: data.publicKeyArmored } );
 			} catch (error) {
 
-				// Give failed feedback to user (Error E4)
-				$( '#secure-form-test' ).append( 
-					'<div class="alert alert-danger">' + data.errorOnKey + '</div>'
+				// Give failed feedback to user (Error E4). The underlying message is
+				// shown too: this is the admin screen, and without it every failure
+				// looks like a bad key even when it is something else entirely.
+				$( '#secure-form-test' ).append(
+					'<div class="alert alert-danger">' + data.errorOnKey + ' (' + error.message + ')</div>'
 				);
 
+				// Enable form
+				$( '#secure-form-test :input' ).prop( 'disabled', false );
 				$( '#secure-form-test .spinner' ).removeClass( 'is-active' );
 
 				return;

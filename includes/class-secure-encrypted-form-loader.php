@@ -59,7 +59,6 @@ class Secure_Encrypted_Form_Loader {
 		$this->actions    = array();
 		$this->filters    = array();
 		$this->shortcodes = array();
-
 	}
 
 	/**
@@ -129,7 +128,6 @@ class Secure_Encrypted_Form_Loader {
 		);
 
 		return $hooks;
-
 	}
 
 	/**
@@ -150,7 +148,5 @@ class Secure_Encrypted_Form_Loader {
 		foreach ( $this->shortcodes as $hook ) {
 			add_shortcode( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'], $hook['accepted_args'] );
 		}
-
 	}
-
 }

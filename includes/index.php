@@ -1,1 +1,6 @@
-<?php // Silence is golden
+<?php
+/**
+ * Silence is golden.
+ *
+ * @package    Secure_Encrypted_Form
+ */

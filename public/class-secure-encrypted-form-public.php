@@ -9,10 +9,6 @@
  * @subpackage Secure_Encrypted_Form/public
  */
 
-use Monolog\Logger;
-use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\RotatingFileHandler;
-
 /**
  * The public-facing functionality of the plugin.
  *
@@ -48,7 +44,7 @@ class Secure_Encrypted_Form_Public {
 	 *
 	 * @since    1.0.0
 	 * @access   private
-	 * @var      Logger    $logger    The logger.
+	 * @var      Secure_Encrypted_Form_Logger    $logger    The logger.
 	 */
 	private $logger;
 
@@ -64,43 +60,7 @@ class Secure_Encrypted_Form_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
 
-		$this->set_logger();
-
-	}
-
-	/**
-	 * Initialize the Monolog logger.
-	 *
-	 * @since    1.0.0
-	 */
-	private function set_logger() {
-
-		$upload_dir     = wp_upload_dir();
-		$plugin_dirname = $upload_dir['basedir'] . '/' . $this->plugin_name;
-
-		// Check folder or create.
-		if ( ! file_exists( $plugin_dirname ) ) {
-			wp_mkdir_p( $plugin_dirname );
-		}
-
-		// The default date format is "Y-m-d\TH:i:sP".
-		$date_format = 'Y-m-d\TH:i:s';
-
-		// the default output format is "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n"
-		// we now change the default output format according to our needs.
-		$output = "[%datetime%] %level_name%: %message% %context%\n";
-
-		// finally, create a formatter.
-		$formatter = new LineFormatter( $output, $date_format );
-
-		// Create a handler.
-		$rotating_file = new RotatingFileHandler( $plugin_dirname . '/log.log', 7 );
-		$rotating_file->setFormatter( $formatter );
-
-		// bind it to a logger object.
-		$this->logger = new Logger( 'plugin-log' );
-		$this->logger->pushHandler( $rotating_file );
-
+		$this->logger = new Secure_Encrypted_Form_Logger();
 	}
 
 	/**
@@ -123,7 +83,6 @@ class Secure_Encrypted_Form_Public {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/secure-encrypted-form-public.css', array(), $this->version, 'all' );
-
 	}
 
 	/**
@@ -145,7 +104,14 @@ class Secure_Encrypted_Form_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( 'openpgpjs', plugin_dir_url( dirname( __FILE__ ) ) . 'lib/js/openpgp.min.js', array(), '5.5.0', true );
+		if ( Secure_Encrypted_Form_Turnstile::is_enabled() ) {
+			Secure_Encrypted_Form_Turnstile::exclude_from_optimizers();
+
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Cloudflare versions this URL itself, appending ours would be wrong.
+			wp_enqueue_script( Secure_Encrypted_Form_Turnstile::SCRIPT_HANDLE, Secure_Encrypted_Form_Turnstile::SCRIPT_URL, array(), null, true );
+		}
+
+		wp_enqueue_script( 'openpgpjs', plugin_dir_url( __DIR__ ) . 'lib/js/openpgp.min.js', array(), '6.3.0', true );
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/secure-encrypted-form-public.js', array( 'jquery', 'openpgpjs' ), $this->version, false );
 
 		/**
@@ -160,6 +126,9 @@ class Secure_Encrypted_Form_Public {
 				'nonce'            => wp_create_nonce( 'secure_form_nonce' ),
 				'publicKeyArmored' => get_option( 'secure_encrypted_form_option_name' )['public_key'],
 				'errorOnKey'       => esc_html__( 'Error: it seems to be an error/typo on the encryption key. Please contact the web administrator.', 'secure-encrypted-form' ),
+				'errorOnEncrypt'   => esc_html__( 'Error: the message could not be encrypted, the encryption key may have expired. Please contact the web administrator.', 'secure-encrypted-form' ),
+				'errorNoSecureCtx' => esc_html__( 'Error: this page is not served over a secure connection (HTTPS), so your browser will not allow the message to be encrypted. Nothing has been sent. Please contact the web administrator.', 'secure-encrypted-form' ),
+				'turnstileEnabled' => Secure_Encrypted_Form_Turnstile::is_enabled(),
 			)
 		);
 	}
@@ -192,6 +161,9 @@ class Secure_Encrypted_Form_Public {
 		$form .= '<label for="message">' . esc_html__( 'Message', 'secure-encrypted-form' ) . '</label>';
 		$form .= '<textarea id="message" name="message" rows="5"></textarea>';
 		$form .= '</div>';
+		// Right above the submit button: the token is read with
+		// turnstile.getResponse(), so the widget can live outside the form element.
+		$form .= Secure_Encrypted_Form_Turnstile::get_widget_markup();
 		$form .= '<input type="submit" form="sform" name="submit" value="' . esc_attr__( 'Submit', 'secure-encrypted-form' ) . '">';
 		$form .= '</div>';
 
@@ -207,6 +179,26 @@ class Secure_Encrypted_Form_Public {
 
 		// This is a secure process to validate if this request comes from a valid source.
 		check_ajax_referer( 'secure_form_nonce', 'security' );
+
+		// Spam check, before anything else is done with the submission. It has to
+		// happen here and not in the browser: a bot would just skip it there.
+		if ( Secure_Encrypted_Form_Turnstile::is_enabled() ) {
+			$turnstile = new Secure_Encrypted_Form_Turnstile( $this->logger );
+			$token     = isset( $_POST[ Secure_Encrypted_Form_Turnstile::TOKEN_FIELD ] )
+				? sanitize_text_field( wp_unslash( $_POST[ Secure_Encrypted_Form_Turnstile::TOKEN_FIELD ] ) )
+				: '';
+
+			if ( ! $turnstile->verify( $token ) ) {
+				echo wp_json_encode(
+					array(
+						'success' => false,
+						'errors'  => array( 'turnstile' => true ),
+						'message' => esc_html__( 'Error: the spam check could not be completed, please try again.', 'secure-encrypted-form' ),
+					)
+				);
+				wp_die();
+			}
+		}
 
 		// Activate wp_mail errors.
 		add_action( 'wp_mail_failed', array( $this, 'debug_wp_mail_failure' ) );
@@ -263,21 +255,12 @@ class Secure_Encrypted_Form_Public {
 				esc_html( $this->plugin_name ),
 				esc_html( $this->version )
 			);
-			$body .= sprintf(
-				/* translators: %1$s and %2$s are HTML a tags */
-				esc_html__(
-					'%1$sIf you find this piece of software usefull please consider %2$sdonating to the author%3$s.',
-					'secure-encrypted-form'
-				),
-				'<br>',
-				'<a href="' . esc_url( 'https://charrua.es/donaciones' ) . '">',
-				'</a>'
-			);
 
 			// Create file, rename it ans use it as attachment.
 			$temp_file = wp_tempnam( 'secure-message' );
 			$fileinfo  = pathinfo( $temp_file );
 			$filename  = $fileinfo['dirname'] . '/' . $fileinfo['filename'] . '.txt.gpg';
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Writing a local temp file for the mail attachment.
 			file_put_contents( $filename, $message_field );
 
 			$attachments = array( $filename );
@@ -290,11 +273,17 @@ class Secure_Encrypted_Form_Public {
 
 			// Try to send mail.
 			// Also diagnose if PHP mail() function is disabled pn webhost.
+			// Anything else that goes wrong is reported as a regular sending error, so
+			// the visitor always gets an answer and the cause ends up in the log.
+			$sent = false;
+
 			try {
 				$sent = wp_mail( $to, $subject, $body, $headers, $attachments );
-			} catch ( Error $e ) {
-				if ( str_contains( $e->getMessage(), 'Call to undefined function PHPMailer\PHPMailer\mail()' ) ) {
+			} catch ( Throwable $e ) {
+				if ( false !== strpos( $e->getMessage(), 'Call to undefined function PHPMailer\PHPMailer\mail()' ) ) {
 					$sent = 'php_mail_fail';
+				} else {
+					$this->logger->error( 'wp_mail threw an exception:', array( 'error' => $e->getMessage() ) );
 				}
 			}
 
@@ -304,14 +293,7 @@ class Secure_Encrypted_Form_Public {
 				$data['success'] = true;
 				$data['message'] = esc_html__( 'Success: secure encrypted message sent.', 'secure-encrypted-form' );
 
-				$this->logger->debug(
-					'Secure email sent: ',
-					array(
-						'from'    => $email_field,
-						'to'      => $to,
-						'subject' => $subject,
-					)
-				);
+				$this->logger->debug( 'Secure email sent.' );
 
 			} elseif ( false === $sent ) {
 
@@ -329,12 +311,12 @@ class Secure_Encrypted_Form_Public {
 				$data['errors']   = $errors;
 				$data['message']  = esc_html__( 'Error: secure encrypted message could not be sent, please contact website owner.', 'secure-encrypted-form' );
 
-				$this->logger->error( 'Secure email not sent: ', array( 'to' => $to ) );
+				$this->logger->error( 'Secure email not sent.' );
 				$this->logger->error( 'PHP mail() function is disabled on webhost.' );
 			}
 
 			// Delete temp file (attachment).
-			unlink( $filename );
+			wp_delete_file( $filename );
 		}
 
 		// Disable wp_mail capture errors.
@@ -342,7 +324,6 @@ class Secure_Encrypted_Form_Public {
 
 		echo wp_json_encode( $data );
 		wp_die();
-
 	}
 
 	/**
@@ -352,10 +333,8 @@ class Secure_Encrypted_Form_Public {
 	 * @param   WP_Error $wp_error The error object.
 	 */
 	public function debug_wp_mail_failure( $wp_error ) {
-		$to = $wp_error->error_data['wp_mail_failed']['to'];
-		$this->logger->error( 'Secure email not sent: ', $to );
+		$this->logger->error( 'Secure email not sent.' );
 		$this->logger->error( 'Internal error code E2' );
-		$this->logger->error( 'wp_mail: ', $wp_error->errors );
+		$this->logger->error( 'wp_mail:', array( 'error' => $wp_error->get_error_message() ) );
 	}
-
 }
